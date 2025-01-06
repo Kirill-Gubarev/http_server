@@ -2,6 +2,7 @@ CMAKE_MINIMUM_REQUIRED(VERSION 3.28)
 PROJECT(http_server)
 INCLUDE_DIRECTORIES(${PROJECT_NAME}
 	src/
+	external/asio/asio/include/
 )
 ADD_EXECUTABLE(${PROJECT_NAME}
 	src/main.cpp

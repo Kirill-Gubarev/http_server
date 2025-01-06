@@ -1,6 +1,7 @@
 #include <iostream>
+#include <asio/version.hpp>
 
 int main(){
-	std::cout << "qwerty" << std::endl;
+	std::cout << "asio version: " << ASIO_VERSION << std::endl;
 	return 0;
 }
