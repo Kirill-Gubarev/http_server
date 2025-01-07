@@ -1,7 +1,11 @@
-#include <iostream>
-#include <asio/version.hpp>
+#include "server.h"
+#include "command_line.h"
+
+net::Server server;
+utils::Command_line command_line(server);
 
 int main(){
-	std::cout << "asio version: " << ASIO_VERSION << std::endl;
+	server.start();
+	command_line.run();
 	return 0;
 }

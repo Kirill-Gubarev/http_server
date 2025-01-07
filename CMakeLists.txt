@@ -6,4 +6,6 @@ INCLUDE_DIRECTORIES(${PROJECT_NAME}
 )
 ADD_EXECUTABLE(${PROJECT_NAME}
 	src/main.cpp
+	src/server.cpp				src/server.h
+	src/command_line.cpp		src/command_line.h
 )
