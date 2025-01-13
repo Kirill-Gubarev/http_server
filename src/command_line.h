@@ -3,16 +3,17 @@
 
 #include "server.h"
 #include <unordered_map>
+#include <functional>
 
 namespace utils{
 
 class Command_line{
 private:
 	net::Server& server;
+	bool is_running;
 	std::unordered_map<
 		std::string, 
-		int(*)(const std::string& command, net::Server& server)>
-			commands_map;
+		std::function<int(const std::string&)>> commands_map;
 	void commands_map_init();
 
 public:
@@ -22,6 +23,7 @@ public:
 	~Command_line();
 
 	void run();
+	void stop();
 };
 }
 
