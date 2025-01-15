@@ -1,8 +1,10 @@
 #include "server.h"
+
 #include <iostream>
+#include "session.h"
 
 net::Server::Server():
-	io_context_(), acceptor_(io_context_), sessions(0){}
+	io_context_(), acceptor_(io_context_){}
 
 net::Server::~Server(){
 	stop();
@@ -35,6 +37,9 @@ void net::Server::stop(const std::string& message){
 	std::cout << message << std::endl;
 	stop();
 }
+void net::Server::close_session(Session& session){
+	sessions.erase(session.shared_from_this());
+}
 
 void net::Server::acceptor_init(uint16_t port){
 	asio::error_code ec;
@@ -53,8 +58,10 @@ void net::Server::start_accept(){
 		[this](const asio::error_code& ec, tcp::socket socket){
 			if(!ec){
 				std::cout << "accepted new connection!\n";
-				sessions.emplace_back(std::make_unique<Session>(std::move(socket)));
-				sessions.back()->read();
+				std::shared_ptr<Session> session_ptr = 
+					std::make_shared<Session>(std::move(socket), *this);
+				sessions.insert(session_ptr);
+				session_ptr->read();
 			}
 			else{
 				std::cout << "error accepting: " + ec.message() + '\n';

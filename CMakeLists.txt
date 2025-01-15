@@ -11,4 +11,6 @@ ADD_EXECUTABLE(${PROJECT_NAME}
 	src/command_line.cpp		src/command_line.h
 	src/session.cpp				src/session.h
 	src/http_core.cpp			src/http_core.h
+
+	src/thread_safe_set.hpp
 )

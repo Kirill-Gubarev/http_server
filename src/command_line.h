@@ -13,7 +13,7 @@ private:
 	bool is_running;
 	std::unordered_map<
 		std::string, 
-		std::function<int(const std::string&)>> commands_map;
+		std::function<int(const char*)>> commands_map;
 	void commands_map_init();
 
 public:
@@ -24,6 +24,11 @@ public:
 
 	void run();
 	void stop();
+
+private:
+	void handle_command(std::function<int(const char*)> func, const char* command);
+	std::string static get_first_word(const std::string& str);
+	void static skip_spaces(const char*& ptr);
 };
 }
 

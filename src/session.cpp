@@ -1,9 +1,11 @@
 #include "session.h"
+
 #include <iostream>
 #include "http_core.h"
+#include "server.h"
 
-net::Session::Session(tcp::socket&& socket_):
-	socket_(std::move(socket_)), request_buffer(){}
+net::Session::Session(tcp::socket&& socket_, Server& server):
+	socket_(std::move(socket_)), server(server){}
 
 net::Session::~Session(){
 	std::cout << "session has been deconstructed" << std::endl;
@@ -14,12 +16,14 @@ void net::Session::read(){
 			if(!ec){
 				request.append(request_buffer.data(), request_buffer.size());
 				core::process_request(*this, std::move(request));
-				read();		
+				read();
 			}
-			else if(ec == asio::error::eof)
+			else if(ec == asio::error::eof){
 				std::cout << "connection has been closed" << std::endl;
+				server.close_session(*this);
+			}
 			else
-				std::cout << "receving error: " << ec.message() << "\n";			
+				std::cout << "receving error: " << ec.message() << "\n";
 		}
 	);
 }
