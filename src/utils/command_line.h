@@ -1,7 +1,7 @@
 #ifndef COMMAND_LINE_H
 #define COMMAND_LINE_H
 
-#include "server.h"
+#include "net/server.h"
 #include <unordered_map>
 #include <functional>
 

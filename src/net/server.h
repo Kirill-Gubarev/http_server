@@ -5,7 +5,7 @@
 #include <cstdint>
 #include <thread>
 
-#include "thread_safe_set.hpp"
+#include "utils/thread_safe_set.hpp"
 
 namespace net{
 	class Session;

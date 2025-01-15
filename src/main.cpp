@@ -1,5 +1,5 @@
-#include "server.h"
-#include "command_line.h"
+#include "net/server.h"
+#include "utils/command_line.h"
 
 net::Server server;
 utils::Command_line command_line(server);

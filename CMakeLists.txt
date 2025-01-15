@@ -7,10 +7,12 @@ INCLUDE_DIRECTORIES(${PROJECT_NAME}
 )
 ADD_EXECUTABLE(${PROJECT_NAME}
 	src/main.cpp
-	src/server.cpp				src/server.h
-	src/command_line.cpp		src/command_line.h
-	src/session.cpp				src/session.h
-	src/http_core.cpp			src/http_core.h
 
-	src/thread_safe_set.hpp
+	src/net/server.cpp				src/net/server.h
+	src/net/session.cpp				src/net/session.h
+
+	src/utils/command_line.cpp		src/utils/command_line.h
+	src/utils/thread_safe_set.hpp
+
+	src/core/http_core.cpp			src/core/http_core.h
 )
