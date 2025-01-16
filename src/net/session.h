@@ -3,6 +3,7 @@
 
 #include <asio.hpp>
 #include <array>
+#include <fstream>
 
 namespace net{
 	class Server;
@@ -12,7 +13,7 @@ namespace net{
 	private:
 		Server& server;
 		tcp::socket socket_;
-		std::array<char, 1024> request_buffer;
+		std::array<char, 1024> receive_buffer;
 		std::string request;
 
 	public:
@@ -21,8 +22,10 @@ namespace net{
 		Session operator=(const Session& other) = delete;
 		~Session();
 
-		void read();
-		void write(const std::string& message);
+		void receive();
+		void send(const std::string message);
+		void send(const std::array<char, 1024> message, size_t length);
+		void send(const std::string& header, std::ifstream& body);
 	};
 }
 #endif//SESSION_H

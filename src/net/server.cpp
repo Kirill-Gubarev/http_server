@@ -61,7 +61,7 @@ void net::Server::start_accept(){
 				std::shared_ptr<Session> session_ptr = 
 					std::make_shared<Session>(std::move(socket), *this);
 				sessions.insert(session_ptr);
-				session_ptr->read();
+				session_ptr->receive();
 			}
 			else{
 				std::cout << "error accepting: " + ec.message() + '\n';
