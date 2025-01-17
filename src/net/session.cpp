@@ -38,7 +38,7 @@ void net::Session::send(const std::string message){
         }
 	);
 }
-void net::Session::send(const std::array<char, 1024> message, size_t length){
+void net::Session::send(const array_char message, size_t length){
     asio::async_write(socket_, asio::buffer(message, length),
         [this](asio::error_code ec, size_t length){
             if (ec) {
@@ -48,15 +48,4 @@ void net::Session::send(const std::array<char, 1024> message, size_t length){
             }
         }
 	);
-}
-
-void net::Session::send(const std::string& header, std::ifstream& file){
-	send(header);
-	std::array<char, 1024> buffer;
-	while (file) {
-        file.read(buffer.data(), buffer.size()); 
-        std::streamsize bytes_read = file.gcount();
-        if (bytes_read > 0)
-			send(buffer, bytes_read);
-    }
 }

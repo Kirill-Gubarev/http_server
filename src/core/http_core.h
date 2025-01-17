@@ -2,7 +2,8 @@
 #define HTTP_CORE_H
 
 #include <string>
-#include "net/session.h"
+
+namespace net{class Session;}
 
 namespace core{
 using std::string;
