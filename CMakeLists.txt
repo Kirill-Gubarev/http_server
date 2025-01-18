@@ -17,4 +17,5 @@ ADD_EXECUTABLE(${PROJECT_NAME}
 	src/core/core.cpp				src/core/core.h
 	src/core/http_core.cpp			src/core/http_core.h
 	src/core/http_sending.cpp		src/core/http_sending.h
+	src/core/html_render.cpp		src/core/html_render.h
 )

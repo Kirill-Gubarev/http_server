@@ -7,8 +7,9 @@ namespace net{class Session;}
 
 namespace core{
 	using std::string;	
-
-	string create_http_request(int http_code, const string& mime, size_t body_size);
+	void inline send_message(net::Session& session, const string& message);
+	void send_file_chunked(net::Session& session, string file_path);
+	void send_file_full(net::Session& session, const string& file);
 	void send_http_request(net::Session& session, int http_code, const string& file_path);
 }
 
