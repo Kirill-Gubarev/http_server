@@ -1,6 +1,5 @@
 #include "html/html_render.h"
 
-#include "utils/file_utils.h"
 #include "http/http_utils.h"
 
 namespace html{
@@ -22,14 +21,16 @@ static void replace_placeholders(string* const page, const string& placeholder, 
 	}
 }
 
-string render_error_page(int http_code){
-	std::string file = utils::read_file_full("assets/templates/error_page.html");
-	if(file.size() == 0)
-		file = default_error_page;
+void render_error_page(int http_code, utils::file_data* const file){
+	std::error_code ec;
+	utils::read_file_full(file, "assets/templates/error_page.html", ec);
+
+	if(ec)
+		file->content = default_error_page;
+
 	replace_placeholders(
-			&file, "{{ERROR}}", 
+			&file->content, "{{ERROR}}", 
 			std::to_string(http_code) + ' ' + http::get_description(http_code));
-	return file;
 }
 
 }// namespace html
