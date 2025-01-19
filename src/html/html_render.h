@@ -3,9 +3,10 @@
 
 #include <string>
 
-namespace core{
+namespace html{
 	using std::string;
-	string render_error_page(int code);	
+
+	string render_error_page(int http_code);	
 }
 
 #endif//HTML_RENDER_H

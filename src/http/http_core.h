@@ -5,8 +5,9 @@
 
 namespace net{class Session;}
 
-namespace core{
-using std::string;
+namespace http{
+	using std::string;
+
 	void process_request(net::Session& session, string&& request);
 }
 

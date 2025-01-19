@@ -1,7 +1,7 @@
 #include "session.h"
 
 #include <iostream>
-#include "core/http_core.h"
+#include "http/http_core.h"
 #include "server.h"
 
 net::Session::Session(tcp::socket&& socket_, Server& server):
@@ -15,7 +15,7 @@ void net::Session::receive(){
 		[this](asio::error_code ec, size_t lenght){
 			if(!ec){
 				request.append(receive_buffer.data(), receive_buffer.size());
-				core::process_request(*this, std::move(request));
+				http::process_request(*this, std::move(request));
 				receive();
 			}
 			else if(ec == asio::error::eof){

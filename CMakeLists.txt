@@ -12,10 +12,12 @@ ADD_EXECUTABLE(${PROJECT_NAME}
 	src/net/session.cpp				src/net/session.h
 
 	src/utils/command_line.cpp		src/utils/command_line.h
+	src/utils/file_utils.cpp		src/utils/file_utils.h
 	src/utils/thread_safe_set.hpp
 
-	src/core/core.cpp				src/core/core.h
-	src/core/http_core.cpp			src/core/http_core.h
-	src/core/http_sending.cpp		src/core/http_sending.h
-	src/core/html_render.cpp		src/core/html_render.h
+	src/http/http_core.cpp			src/http/http_core.h
+	src/http/http_sending.cpp		src/http/http_sending.h
+	src/http/http_utils.cpp			src/http/http_utils.h
+
+	src/html/html_render.cpp		src/html/html_render.h
 )

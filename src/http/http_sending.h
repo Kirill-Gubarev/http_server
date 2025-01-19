@@ -5,9 +5,10 @@
 
 namespace net{class Session;}
 
-namespace core{
+namespace http{
 	using std::string;	
-	void inline send_message(net::Session& session, const string& message);
+	
+	inline void send_message(net::Session& session, const string& message);
 	void send_file_chunked(net::Session& session, string file_path);
 	void send_file_full(net::Session& session, const string& file);
 	void send_http_request(net::Session& session, int http_code, const string& file_path);
