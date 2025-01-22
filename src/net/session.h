@@ -2,18 +2,17 @@
 #define SESSION_H
 
 #include <asio.hpp>
-#include <array>
+#include "def/array_4KB.h"
 
 namespace net{
 	class Server;
 	using asio::ip::tcp;
-	using array_char = std::array<char, 4096>;
 
 	class Session : public std::enable_shared_from_this<Session>{
 	private:
 		Server& server;
 		tcp::socket socket_;
-		array_char receive_buffer;
+		array_4KB receive_buffer;
 		std::string request;
 
 	public:
@@ -21,10 +20,16 @@ namespace net{
 		Session(const Session& other) = delete;
 		Session operator=(const Session& other) = delete;
 		~Session();
+		void close();
 
 		void receive();
-		void send(const std::string message);
-		void send(const array_char message, size_t length);
+		void send(const std::string& data);
+
+	private:
+		void send_limit_4KB(const char* const data, size_t length);
+
+		void receive_callback(asio::error_code& ec, size_t length);
+		void send_callback(asio::error_code& ec, size_t length);
 	};
 }
 #endif//SESSION_H

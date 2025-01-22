@@ -13,10 +13,10 @@ static const std::unordered_map<int, string> http_codes_map{
 	{501, "Not Implemented"}
 };
 static const std::unordered_map<string, string> mime_types_map{
-	{"html", "text/html"},
-	{"js", "application/javascript"},
-	{"ico", "image/x-icon"},
-	{"webm", "video/webm"}
+	{".html", "text/html"},
+	{".js", "application/javascript"},
+	{".ico", "image/x-icon"},
+	{".webm", "video/webm"}
 };
 
 string get_description(int http_code){

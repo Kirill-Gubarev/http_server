@@ -1,11 +1,13 @@
 #include "utils/file_data.h"
 
+#include "def/default_definitions.h"
+
 #include <fstream>
+#include <filesystem>
+
+#define MAX_FILE_SIZE (10*MB)
 
 using std::string;
-
-#define MB_SIZE (1024 * 1024)
-#define MAX_FILE_SIZE (10 * MB_SIZE) // 10 MB
 
 utils::file_data::file_data(){}
 utils::file_data::file_data(const string& content, const string& extension):
@@ -36,9 +38,5 @@ void utils::read_file_full(file_data* const file, const string& file_path, std::
 }
 
 string utils::get_file_extension(const string& file_path){
-	size_t ext_pos = file_path.find_last_of(".") + 1;
-	if (ext_pos != std::string::npos)
-    	return file_path.substr(ext_pos);
-	else
-		return "";
+	return std::filesystem::path(file_path).extension().string();
 }
