@@ -1,19 +1,19 @@
 #include "session.h"
 
-#include "http/http_core.h"
-#include "net/session_manager.h"
+#include "net/server.h"
+#include "http/http_handler.h"
 
 #include <iostream>
 #include <algorithm>
 
-net::Session::Session(tcp::socket&& socket_, Session_manager& session_manager):
-	socket_(std::move(socket_)), session_manager(session_manager){}
+net::Session::Session(tcp::socket&& socket_, Server_context& context):
+	socket_(std::move(socket_)), context(context){}
 
 net::Session::~Session(){
 	std::cout << "session has been deconstructed" << std::endl;
 }
 void net::Session::close(){
-	session_manager.delete_session(*this);
+	context.session_manager.delete_session(*this);
 }
 void net::Session::start(){
 	receive();
@@ -28,7 +28,7 @@ void net::Session::receive(){
 void net::Session::receive_callback(asio::error_code& ec, size_t length){
 	if(!ec){
 		request.append(receive_buffer.data(), receive_buffer.size());
-		http::process_request(*this, std::move(request));
+		context.http_handler.process_request(*this, std::move(request));
 		receive();
 	}
 	else if(ec == asio::error::eof){

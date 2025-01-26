@@ -2,11 +2,12 @@
 
 #include "net/session.h"
 
-net::Session_manager::Session_manager(){}
+net::Session_manager::Session_manager(Server_context& context):
+	context(context){}
 net::Session_manager::~Session_manager(){}
 
 void net::Session_manager::create_session(tcp::socket&& socket_){
-	std::shared_ptr<Session> session_ptr = std::make_shared<Session>(std::move(socket_), *this);
+	std::shared_ptr<Session> session_ptr = std::make_shared<Session>(std::move(socket_), context);
 	session_set.insert(session_ptr);
 	session_ptr->start();
 }

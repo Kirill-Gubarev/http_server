@@ -4,7 +4,9 @@
 #include "session.h"
 
 net::Server::Server():
-	io_context_(), acceptor_(io_context_){}
+	io_context_(), acceptor_(io_context_), context(){}
+net::Server_context::Server_context():
+	session_manager(*this){}
 
 net::Server::~Server(){
 	stop();

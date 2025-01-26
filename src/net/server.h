@@ -6,6 +6,7 @@
 #include <thread>
 
 #include "net/session_manager.h"
+#include "http/http_handler.h"
 
 namespace net{
 	class Session;
@@ -13,6 +14,11 @@ namespace net{
 
 	struct Server_context{
 		Session_manager session_manager;		
+		http::Http_handler http_handler;
+
+		explicit Server_context();
+		Server_context(const Server_context& other) = delete;
+		Server_context operator=(const Server_context& other) = delete;
 	};
 	class Server{
 	private:

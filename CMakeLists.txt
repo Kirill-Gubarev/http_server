@@ -23,7 +23,7 @@ ADD_EXECUTABLE(${PROJECT_NAME}
 	src/utils/file_data.cpp			src/utils/file_data.h
 	src/utils/thread_safe_set.hpp
 
-	src/http/http_core.cpp			src/http/http_core.h
+	src/http/http_handler.cpp		src/http/http_handler.h
 	src/http/http_sending.cpp		src/http/http_sending.h
 	src/http/http_utils.cpp			src/http/http_utils.h
 	src/http/http_routing.cpp		src/http/http_routing.h
