@@ -1,19 +1,22 @@
 #include "session.h"
 
 #include "http/http_core.h"
-#include "server.h"
+#include "net/session_manager.h"
 
 #include <iostream>
 #include <algorithm>
 
-net::Session::Session(tcp::socket&& socket_, Server& server):
-	socket_(std::move(socket_)), server(server){}
+net::Session::Session(tcp::socket&& socket_, Session_manager& session_manager):
+	socket_(std::move(socket_)), session_manager(session_manager){}
 
 net::Session::~Session(){
 	std::cout << "session has been deconstructed" << std::endl;
 }
 void net::Session::close(){
-	server.close_session(*this);
+	session_manager.delete_session(*this);
+}
+void net::Session::start(){
+	receive();
 }
 void net::Session::receive(){
 	socket_.async_read_some(asio::buffer(receive_buffer, receive_buffer.size()),

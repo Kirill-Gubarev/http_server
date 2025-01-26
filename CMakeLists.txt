@@ -17,6 +17,7 @@ ADD_EXECUTABLE(${PROJECT_NAME}
 
 	src/net/server.cpp				src/net/server.h
 	src/net/session.cpp				src/net/session.h
+	src/net/session_manager.cpp		src/net/session_manager.h
 
 	src/utils/command_line.cpp		src/utils/command_line.h
 	src/utils/file_data.cpp			src/utils/file_data.h

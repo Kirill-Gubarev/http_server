@@ -37,9 +37,6 @@ void net::Server::stop(const std::string& message){
 	std::cout << message << std::endl;
 	stop();
 }
-void net::Server::close_session(Session& session){
-	sessions.erase(session.shared_from_this());
-}
 
 void net::Server::acceptor_init(uint16_t port){
 	asio::error_code ec;
@@ -55,13 +52,10 @@ void net::Server::acceptor_init(uint16_t port){
 }
 void net::Server::start_accept(){
 	acceptor_.async_accept(
-		[this](const asio::error_code& ec, tcp::socket socket){
+		[this](const asio::error_code& ec, tcp::socket socket_){
 			if(!ec){
 				std::cout << "accepted new connection!\n";
-				std::shared_ptr<Session> session_ptr = 
-					std::make_shared<Session>(std::move(socket), *this);
-				sessions.insert(session_ptr);
-				session_ptr->receive();
+				context.session_manager.create_session(std::move(socket_));
 			}
 			else{
 				std::cout << "error accepting: " + ec.message() + '\n';
