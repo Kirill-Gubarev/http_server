@@ -21,6 +21,9 @@ namespace http{
 
 	private:
 		void print_request(const string& request);
+
+		void send_http_request(net::Session& session, int http_code, const string& request_path);
+		void send_error_http_request(net::Session& session, int http_code);
 	};
 }
 

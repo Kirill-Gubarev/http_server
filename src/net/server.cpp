@@ -46,11 +46,17 @@ void net::Server::acceptor_init(uint16_t port){
 	acceptor_.open(tcp::v4(), ec);
 	if(ec) stop("opening connection error: " + ec.message());
 
-    acceptor_.bind(tcp::endpoint(tcp::v4(), port), ec);
+	asio::ip::tcp::endpoint endpoint(asio::ip::tcp::v4(), port);
+    acceptor_.bind(endpoint, ec);
 	if(ec) stop("binding connection error: " + ec.message());
 
     acceptor_.listen(asio::socket_base::max_listen_connections, ec);
 	if(ec) stop("listening connection error: " + ec.message());
+
+	asio::ip::tcp::endpoint local_endpoint = acceptor_.local_endpoint();
+	std::cout << "Server is listening on: " 
+					  << local_endpoint.address().to_string() 
+					  << ":" << local_endpoint.port() << std::endl;
 }
 void net::Server::start_accept(){
 	acceptor_.async_accept(

@@ -5,11 +5,11 @@
 namespace http{
 
 static std::unordered_map<string, string> routes = {
-	{"/", "index.html"},
-	{"/favicon.ico", "favicon.ico"},
-	{"/clicker", "clicker.html"},
-	{"/clicker.js", "clicker.js"},
-	{"/monkey.webm", "monkey.webm"}
+	{"/",				"index.html"},
+	{"/favicon.ico",	"favicon.ico"},
+	{"/clicker",		"clicker.html"},
+	{"/clicker.js",		"clicker.js"},
+	{"/monkey.webm",	"monkey.webm"}
 };
 
 string get_route_file_path(const string& request_path, std::error_code& ec){
