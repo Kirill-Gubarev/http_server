@@ -1,8 +1,7 @@
 #ifndef SESSION_MANAGER_H
 #define SESSION_MANAGER_H
 
-#include "utils/thread_safe_set.hpp"
-
+#include <unordered_set>
 #include <asio.hpp>
 #include <memory>
 
@@ -13,7 +12,7 @@ namespace net{
 
 	class Session_manager{
 	private:
-		utils::thread_safe_set<std::shared_ptr<Session>> session_set;
+		std::unordered_set<std::shared_ptr<Session>> session_set;
 		Server_context& context;
 
 	public:

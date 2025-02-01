@@ -7,6 +7,8 @@
 
 #include "net/session_manager.h"
 #include "http/http_handler.h"
+#include "file/file_cacher.h"
+#include "html/html_renderer.h"
 
 namespace net{
 	class Session;
@@ -15,6 +17,8 @@ namespace net{
 	struct Server_context{
 		Session_manager session_manager;		
 		http::Http_handler http_handler;
+		file::File_cacher file_cacher;
+		html::Html_renderer html_renderer;
 
 		explicit Server_context();
 		Server_context(const Server_context& other) = delete;

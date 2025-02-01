@@ -6,7 +6,7 @@
 net::Server::Server():
 	io_context_(), acceptor_(io_context_), context(){}
 net::Server_context::Server_context():
-	session_manager(*this){}
+	session_manager(*this), http_handler(*this), file_cacher(512*MB), html_renderer(*this){}
 
 net::Server::~Server(){
 	stop();

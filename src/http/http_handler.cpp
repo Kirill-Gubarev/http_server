@@ -1,17 +1,18 @@
 #include "http/http_handler.h"
 
+#include "net/server.h"
 #include "net/session.h"
 #include "http/http_utils.h"
 #include "http/http_routing.h"
-#include "html/html_render.h"
-#include "utils/file_data.h"
+#include "html/html_renderer.h"
+#include "file/file_data.h"
 
 #include <iostream>
 #include <sstream>
 
 using std::string;
 
-http::Http_handler::Http_handler(){}
+http::Http_handler::Http_handler(net::Server_context& context): context(context){}
 http::Http_handler::~Http_handler(){}
 
 void http::Http_handler::print_request(const string& request){
@@ -37,7 +38,7 @@ void http::Http_handler::process_request(net::Session& session, string&& request
 		send_error_http_request(session, 405);
 }
 
-static string create_http_request(int http_code, const utils::file_data& file){
+static string create_http_request(int http_code, const file::File_data& file){
 	return 
 		"HTTP/1.1 " + std::to_string(http_code) + ' ' + http::get_description(http_code) + "\r\n"
 		"Content-Type: " + http::get_mime(file.extension) + "; charset=UTF-8\r\n"
@@ -51,23 +52,19 @@ void http::Http_handler::send_http_request(net::Session& session, int http_code,
 		send_error_http_request(session, 404);
 		return;
 	}
-	utils::file_data file;
-	utils::read_file_full(&file, "assets/" + file_path, ec);
 
-	if(ec){
-		if(ec == std::errc::io_error)
-			send_error_http_request(session, 404);
-		else
-			send_error_http_request(session, 500);
+	const file::File_data* file_ptr = context.file_cacher.get_file_ptr("assets/" + file_path);
+	if(!file_ptr){
+		send_error_http_request(session, 404);
 		return;
 	}
 
-	session.send(create_http_request(http_code, file));
-	session.send(file.content);
+	session.send(create_http_request(http_code, *file_ptr));
+	session.send(file_ptr->content);
 }
 void http::Http_handler::send_error_http_request(net::Session& session, int http_code){
-	utils::file_data file;
-	html::render_error_page(http_code, &file);
+	file::File_data file;
+	context.html_renderer.render_error_page(http_code, &file);
 	session.send(create_http_request(http_code, file));
 	session.send(file.content);
 }
