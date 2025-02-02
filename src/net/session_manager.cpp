@@ -7,10 +7,10 @@ net::Session_manager::Session_manager(core::Server_context& context):
 net::Session_manager::~Session_manager(){}
 
 void net::Session_manager::create_session(tcp::socket&& socket_){
-	std::shared_ptr<Session> session_ptr = std::make_shared<Session>(std::move(socket_), context);
-	session_set.insert(session_ptr);
-	session_ptr->start();
+	auto [it, inserted] = session_map.emplace(next_id, std::make_unique<Session>(next_id++, std::move(socket_), context));
+	if(inserted)
+		it->second->start();
 }
 void net::Session_manager::delete_session(Session& session){
-	session_set.erase(session.shared_from_this());	
+	session_map.erase(session.get_id());	
 }

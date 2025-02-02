@@ -6,24 +6,28 @@
 
 #include <asio.hpp>
 #include <array>
+#include <cstdint>
 
 namespace net{
 	using asio::ip::tcp;
 	using std::string;
 
-	class Session : public std::enable_shared_from_this<Session>{
+	class Session{
 	private:
+		const uint64_t id;
 		core::Server_context& context;
 		tcp::socket socket_;
 		std::array<char, 4*KB> buffer;
 		std::string request;
 
 	public:
-		explicit Session(tcp::socket&& socket_, core::Server_context& context);
+		explicit Session(uint64_t id, tcp::socket&& socket_, core::Server_context& context);
 		Session(const Session& other) = delete;
 		Session operator=(const Session& other) = delete;
 		~Session();
 		void close();
+
+		uint64_t get_id() const;
 
 		void start();
 		void send(const std::string& data);

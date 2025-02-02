@@ -3,7 +3,7 @@
 
 #include "core/server_context.h"
 
-#include <unordered_set>
+#include <unordered_map>
 #include <asio.hpp>
 #include <memory>
 
@@ -12,8 +12,9 @@ namespace net{
 
 	class Session_manager{
 	private:
-		std::unordered_set<std::shared_ptr<Session>> session_set;
 		core::Server_context& context;
+		std::unordered_map<uint64_t, std::unique_ptr<Session>> session_map;
+		uint64_t next_id;
 
 	public:
 		explicit Session_manager(core::Server_context& context);	

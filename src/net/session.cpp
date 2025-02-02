@@ -7,14 +7,17 @@
 #include <algorithm>
 #include <string>
 
-net::Session::Session(tcp::socket&& socket_, core::Server_context& context):
-	socket_(std::move(socket_)), context(context){}
+net::Session::Session(uint64_t id, tcp::socket&& socket_, core::Server_context& context):
+	id(id), socket_(std::move(socket_)), context(context){}
 
 net::Session::~Session(){
 	std::cout << "session has been deconstructed" << std::endl;
 }
 void net::Session::close(){
 	context.session_manager.delete_session(*this);
+}
+uint64_t net::Session::get_id() const{
+	return id;
 }
 void net::Session::start(){
 	receive();
