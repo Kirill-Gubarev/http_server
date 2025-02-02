@@ -1,24 +1,25 @@
 #ifndef SESSION_H
 #define SESSION_H
 
-#include <asio.hpp>
+#include "def/memory_units.h"
+#include "core/server_context.h"
 
-#include "def/array_4KB.h"
+#include <asio.hpp>
+#include <array>
 
 namespace net{
-	class Server_context;
 	using asio::ip::tcp;
 	using std::string;
 
 	class Session : public std::enable_shared_from_this<Session>{
 	private:
-		Server_context& context;
+		core::Server_context& context;
 		tcp::socket socket_;
-		array_4KB buffer;
+		std::array<char, 4*KB> buffer;
 		std::string request;
 
 	public:
-		explicit Session(tcp::socket&& socket_, Server_context& context);
+		explicit Session(tcp::socket&& socket_, core::Server_context& context);
 		Session(const Session& other) = delete;
 		Session operator=(const Session& other) = delete;
 		~Session();

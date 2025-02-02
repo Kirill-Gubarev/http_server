@@ -1,19 +1,18 @@
 #ifndef HTTP_HANDLER_H
 #define HTTP_HANDLER_H
 
+#include "core/server_context.h"
 #include <string>
-
-namespace net{class Session; class Server_context;}
 
 namespace http{
 	using std::string;
 
 	class Http_handler{
 	private:
-		net::Server_context& context;
+		core::Server_context& context;
 
 	public:
-		explicit Http_handler(net::Server_context& context);
+		explicit Http_handler(core::Server_context& context);
 		Http_handler(const Http_handler& other) = delete;	
 		Http_handler operator=(const Http_handler& other) = delete;	
 		~Http_handler();

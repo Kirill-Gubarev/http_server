@@ -1,7 +1,7 @@
 #include "http/http_handler.h"
 
-#include "net/server.h"
 #include "net/session.h"
+#include "file/file_cacher.h"
 #include "http/http_utils.h"
 #include "http/http_routing.h"
 #include "html/html_renderer.h"
@@ -12,7 +12,7 @@
 
 using std::string;
 
-http::Http_handler::Http_handler(net::Server_context& context): context(context){}
+http::Http_handler::Http_handler(core::Server_context& context): context(context){}
 http::Http_handler::~Http_handler(){}
 
 void http::Http_handler::print_request(const string& request){

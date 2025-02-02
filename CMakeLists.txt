@@ -12,17 +12,19 @@ INCLUDE_DIRECTORIES(${PROJECT_NAME}
 ADD_EXECUTABLE(${PROJECT_NAME}
 	src/main.cpp
 
-	src/def/default_definitions.h
-	src/def/array_4KB.h
+	src/def/memory_units.h
 
-	src/net/server.cpp				src/net/server.h
-	src/net/session.cpp				src/net/session.h
+	src/core/server.cpp				src/core/server.h
+									src/core/server_context.h
+
+	src/ctrl/command_line.cpp		src/ctrl/command_line.h
+
+	src/net/network_engine.cpp		src/net/network_engine.h
 	src/net/session_manager.cpp		src/net/session_manager.h
+	src/net/session.cpp				src/net/session.h
 
-	src/utils/command_line.cpp		src/utils/command_line.h
-
-	src/file/file_data.cpp			src/file/file_data.h
 	src/file/file_cacher.cpp		src/file/file_cacher.h
+	src/file/file_data.cpp			src/file/file_data.h
 
 	src/http/http_handler.cpp		src/http/http_handler.h
 	src/http/http_utils.cpp			src/http/http_utils.h

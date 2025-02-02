@@ -1,20 +1,22 @@
 #include "command_line.h"
+
+#include "net/network_engine.h"
+
 #include <string>
 #include <iostream>
-#include <cstdlib>
 
-utils::Command_line::Command_line(net::Server& server):
-	server(server), is_running(false){
+ctrl::Command_line::Command_line(core::Server_context& context):
+	context(context), is_running(false){
 	commands_map_init();	
 }
-void utils::Command_line::commands_map_init(){
+void ctrl::Command_line::commands_map_init(){
 	commands_map = {
 		{"stop", [this](const char* command)->int{
-			server.stop();
+			context.network_engine.stop();
 			return 0;
 		}},
 		{"exit", [this](const char* command)->int{
-			server.stop();
+			context.network_engine.stop();
 			stop();
 			exit(0);
 		}},
@@ -25,9 +27,11 @@ void utils::Command_line::commands_map_init(){
 	};
 }
 
-utils::Command_line::~Command_line(){}
+ctrl::Command_line::~Command_line(){
+	stop();
+}
 
-void utils::Command_line::run(){
+void ctrl::Command_line::start(){
 	is_running = true;
 
 	std::string command = "";
@@ -41,21 +45,21 @@ void utils::Command_line::run(){
 			std::cout << "command not found" << std::endl;
 	}
 }
-void utils::Command_line::stop(){
+void ctrl::Command_line::stop(){
 	is_running = false;
 }
 
-void utils::Command_line::handle_command(std::function<int(const char*)> func, const char* command){
+void ctrl::Command_line::handle_command(std::function<int(const char*)> func, const char* command){
 	skip_spaces(command);
 	func(command);		
 }
-std::string utils::Command_line::get_first_word(const std::string& str){
+std::string ctrl::Command_line::get_first_word(const std::string& str){
 	size_t pos = str.find(' ');
 	if(pos == std::string::npos)
 		return str;
 	return str.substr(0, pos);	
 }
-void utils::Command_line::skip_spaces(const char*& ptr){
+void ctrl::Command_line::skip_spaces(const char*& ptr){
 	while(ptr[0] == ' ') 
 		++ptr;
 }

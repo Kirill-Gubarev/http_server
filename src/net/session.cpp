@@ -1,13 +1,13 @@
 #include "session.h"
 
-#include "net/server.h"
 #include "http/http_handler.h"
+#include "session_manager.h"
 
 #include <iostream>
 #include <algorithm>
 #include <string>
 
-net::Session::Session(tcp::socket&& socket_, Server_context& context):
+net::Session::Session(tcp::socket&& socket_, core::Server_context& context):
 	socket_(std::move(socket_)), context(context){}
 
 net::Session::~Session(){

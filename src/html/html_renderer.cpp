@@ -2,7 +2,7 @@
 
 #include "http/http_utils.h"
 #include "file/file_data.h"
-#include "net/server.h"
+#include "file/file_cacher.h"
 
 static const std::string default_error_page = R"(<!DOCTYPE html>
 <head>
@@ -13,7 +13,7 @@ static const std::string default_error_page = R"(<!DOCTYPE html>
     <a href="/">Go back to homepage</a>
 </body>)";
 
-html::Html_renderer::Html_renderer(net::Server_context& context): context(context){}
+html::Html_renderer::Html_renderer(core::Server_context& context): context(context){}
 
 void html::Html_renderer::render_error_page(int http_code, file::File_data* page_ptr){
 	const file::File_data* error_page_ptr = context.file_cacher.get_file_ptr("assets/templates/error_page.html");

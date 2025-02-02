@@ -1,25 +1,19 @@
-#include "server.h"
+#include "net/network_engine.h"
+
+#include "net/session_manager.h"
 
 #include <iostream>
-#include "session.h"
 
-net::Server::Server():
-	io_context_(), acceptor_(io_context_), context(){}
-net::Server_context::Server_context():
-	session_manager(*this), http_handler(*this), file_cacher(512*MB), html_renderer(*this){}
+net::Network_engine::Network_engine(core::Server_context& context):
+	context(context), acceptor_(io_context_), is_running(false){}
+net::Network_engine::~Network_engine(){}
 
-net::Server::~Server(){
-	stop();
-}
-
-void net::Server::start(uint16_t port){
+void net::Network_engine::async_start(uint16_t port){
 	if(is_running) return;
 	is_running = true;
 
-	std::cout << "starting the server..." << std::endl;
-
-	acceptor_init(port);
-	start_accept();
+	acceptor_init(port);	
+	start_async_accept();
 
 	io_context_thread = std::thread([this](){
 		io_context_.run();
@@ -27,20 +21,17 @@ void net::Server::start(uint16_t port){
 	});
 	io_context_thread.detach();
 }
-void net::Server::stop(){
+void net::Network_engine::stop(){
 	if(!is_running) return;
 	is_running = false;
 
 	io_context_.stop();
-
-	std::cout << "stopping the server..." << std::endl;
 }
-void net::Server::stop(const std::string& message){
+void net::Network_engine::stop(const string& message){
 	std::cout << message << std::endl;
 	stop();
 }
-
-void net::Server::acceptor_init(uint16_t port){
+void net::Network_engine::acceptor_init(uint16_t port){
 	asio::error_code ec;
 		
 	acceptor_.open(tcp::v4(), ec);
@@ -54,11 +45,11 @@ void net::Server::acceptor_init(uint16_t port){
 	if(ec) stop("listening connection error: " + ec.message());
 
 	asio::ip::tcp::endpoint local_endpoint = acceptor_.local_endpoint();
-	std::cout << "Server is listening on: " 
+	std::cout << "server is listening on: " 
 					  << local_endpoint.address().to_string() 
 					  << ":" << local_endpoint.port() << std::endl;
 }
-void net::Server::start_accept(){
+void net::Network_engine::start_async_accept(){
 	acceptor_.async_accept(
 		[this](const asio::error_code& ec, tcp::socket socket_){
 			if(!ec){
@@ -68,7 +59,7 @@ void net::Server::start_accept(){
 			else{
 				std::cout << "error accepting: " + ec.message() + '\n';
 			}
-			start_accept();
+			start_async_accept();
 		}
 	);	
 }

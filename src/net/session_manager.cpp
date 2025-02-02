@@ -2,7 +2,7 @@
 
 #include "net/session.h"
 
-net::Session_manager::Session_manager(Server_context& context):
+net::Session_manager::Session_manager(core::Server_context& context):
 	context(context){}
 net::Session_manager::~Session_manager(){}
 
