@@ -14,3 +14,9 @@ void net::Session_manager::create_session(tcp::socket&& socket_){
 void net::Session_manager::delete_session(Session& session){
 	session_map.erase(session.get_id());	
 }
+size_t net::Session_manager::size()const{
+	return session_map.size();
+}
+void net::Session_manager::clear(){
+	session_map.clear();
+}

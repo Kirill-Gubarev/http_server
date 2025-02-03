@@ -7,6 +7,7 @@
 #include <cstdint>
 #include <thread>
 #include <string>
+#include <memory>
 
 namespace net{
 	using std::string;
@@ -14,10 +15,9 @@ namespace net{
 
 	class Network_engine{
 	private:
+		std::unique_ptr<asio::io_context> io_context_ptr;
+		std::unique_ptr<tcp::acceptor> acceptor_ptr;
 		core::Server_context& context;
-		asio::io_context io_context_;
-		tcp::acceptor acceptor_;
-
 		std::thread io_context_thread;
 		bool is_running;
 
@@ -27,13 +27,14 @@ namespace net{
 		Network_engine(const Network_engine& other) = delete;
 		Network_engine& operator=(const Network_engine& other) = delete;
 
-		void async_start(uint16_t port = 80);
-		void stop();
-		void stop(const string& message);
+		bool async_start(uint16_t port = 80);
+		bool stop();
+		bool stop(const string& message);
+		bool restart();
 
 	private:
-		void acceptor_init(uint16_t port);
 		void start_async_accept();
+		void acceptor_init(uint16_t port);
 	};
 }
 

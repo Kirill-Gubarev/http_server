@@ -24,8 +24,9 @@ namespace net{
 		
 		void create_session(tcp::socket&& socket_);
 		void delete_session(Session& session);
-	private:
-		
+
+		size_t size()const;
+		void clear();
 	};
 }
 
