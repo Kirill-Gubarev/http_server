@@ -1,6 +1,7 @@
 #include "http/http_handler.h"
 
 #include "net/session.h"
+#include "net/session_manager.h"
 #include "file/file_cacher.h"
 #include "http/http_utils.h"
 #include "http/http_routing.h"
@@ -59,12 +60,12 @@ void http::Http_handler::send_http_request(net::Session& session, int http_code,
 		return;
 	}
 
-	session.send(create_http_request(http_code, *file_ptr));
-	session.send(file_ptr->content);
+	context.session_manager.send_copy(session, create_http_request(http_code, *file_ptr));
+	context.session_manager.send_ptr(session, &file_ptr->content);
 }
 void http::Http_handler::send_error_http_request(net::Session& session, int http_code){
 	file::File_data file;
 	context.html_renderer.render_error_page(http_code, &file);
-	session.send(create_http_request(http_code, file));
-	session.send(file.content);
+	context.session_manager.send_copy(session, create_http_request(http_code, file));
+	context.session_manager.send_copy(session, file.content);
 }

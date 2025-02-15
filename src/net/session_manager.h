@@ -6,9 +6,11 @@
 #include <unordered_map>
 #include <asio.hpp>
 #include <memory>
+#include <string>
 
 namespace net{
 	using asio::ip::tcp;
+	using std::string;
 
 	class Session_manager{
 	private:
@@ -23,10 +25,20 @@ namespace net{
 		~Session_manager();	
 		
 		void create_session(tcp::socket&& socket_);
-		void delete_session(Session& session);
+		void delete_session(uint64_t id);
 
 		size_t size()const;
 		void clear();
+
+		void send_ptr(Session& session, const string* data_ptr);
+		void send_copy(Session& session, const string& data);
+
+	private:
+		void start_receive(Session& session);
+		void receive_callback(uint64_t id, asio::error_code& ec, size_t length);
+		
+		template<typename PTR>
+		void start_send(Session& session, PTR data_ptr, size_t start);
 	};
 }
 
