@@ -25,8 +25,7 @@ namespace net{
 		~Session_manager();	
 		
 		void create_session(tcp::socket&& socket_);
-		void delete_session(uint64_t id);
-
+		size_t delete_session(uint64_t id);
 		size_t size()const;
 		void clear();
 
@@ -35,10 +34,12 @@ namespace net{
 
 	private:
 		void start_receive(Session& session);
-		void receive_callback(uint64_t id, asio::error_code& ec, size_t length);
+		void receive_callback(uint64_t id , size_t length);
 		
 		template<typename PTR>
 		void start_send(Session& session, PTR data_ptr, size_t start);
+
+		void reset_timer(Session& session);
 	};
 }
 

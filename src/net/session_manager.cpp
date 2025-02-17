@@ -14,8 +14,8 @@ void net::Session_manager::create_session(tcp::socket&& socket_){
 	if(inserted)
 		start_receive(*it->second);
 }
-void net::Session_manager::delete_session(uint64_t id){
-	session_map.erase(id);
+size_t net::Session_manager::delete_session(uint64_t id){
+	return session_map.erase(id);
 }
 size_t net::Session_manager::size()const{
 	return session_map.size();
@@ -27,30 +27,32 @@ void net::Session_manager::clear(){
 void net::Session_manager::start_receive(Session& session){
 	session.socket_.async_read_some(asio::buffer(session.buffer, session.buffer.size()),
 		[this, id = session.id](asio::error_code ec, size_t length){
-			receive_callback(id, ec, length);
+			if(!ec){
+				receive_callback(id, length);
+			}
+			else if(ec == asio::error::eof){
+				std::cout << "EOF" << std::endl;
+				delete_session(id);
+			}
+			else{
+				std::cout << "receving error: " << ec.message() << "\n";
+			}
 		}
 	);
 }
-void net::Session_manager::receive_callback(uint64_t id, asio::error_code& ec, size_t length){
-	if(!ec){
-		auto it = session_map.find(id);
-		if(it == session_map.end())
-			return;
+void net::Session_manager::receive_callback(uint64_t id, size_t length){
+	auto it = session_map.find(id);
+	if(it == session_map.end())
+		return;
 
-		Session& session = *it->second;
-		session.request.append(session.buffer.data(), length);
-		if(session.request.find("\r\n\r\n") != string::npos){
-			context.http_handler.process_request(session, std::move(session.request));
-		}
-		start_receive(session);
+	Session& session = *it->second;
+	reset_timer(session);
+	session.request.append(session.buffer.data(), length);
+	if(session.request.find("\r\n\r\n") != string::npos || session.request.size() >= 1*MB){
+		context.http_handler.process_request(session, std::move(session.request));
 	}
-	else if(ec == asio::error::eof){
-		std::cout << "EOF" << std::endl;
-		delete_session(id);
-	}
-	else{
-		std::cout << "receving error: " << ec.message() << "\n";
-	}
+	
+	start_receive(session);
 }
 void net::Session_manager::send_ptr(Session& session, const string* data_ptr){
 	start_send(session, data_ptr, 0);
@@ -77,4 +79,12 @@ void net::Session_manager::start_send(Session& session, PTR data_ptr, size_t sta
 				start_send(*it->second, data_ptr, start + length);
         }
 	);
+}
+
+void net::Session_manager::reset_timer(Session& session){
+    session.timer.expires_after(std::chrono::seconds(10));
+    session.timer.async_wait([this, id = session.id](const asio::error_code& ec) {
+        if(!ec && delete_session(id))
+			std::cout << "timeout reached, session closed" << std::endl;
+    });
 }

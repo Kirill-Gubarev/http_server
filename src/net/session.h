@@ -2,7 +2,6 @@
 #define SESSION_H
 
 #include "def/memory_units.h"
-#include "core/server_context.h"
 
 #include <asio.hpp>
 #include <array>
@@ -17,6 +16,7 @@ namespace net{
 		tcp::socket socket_;
 		std::array<char, 4*KB> buffer;
 		std::string request;
+		asio::steady_timer timer;
 
 		explicit Session(uint64_t id, tcp::socket&& socket_);
 		Session(const Session& other) = delete;
