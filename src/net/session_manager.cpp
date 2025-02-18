@@ -3,6 +3,7 @@
 #include <iostream>
 #include "net/session.h"
 #include "http/http_handler.h"
+#include "http/http_request.h"
 
 net::Session_manager::Session_manager(core::Server_context& context):
 	context(context){}
@@ -25,6 +26,7 @@ void net::Session_manager::clear(){
 }
 
 void net::Session_manager::start_receive(Session& session){
+	reset_timer(session);
 	session.socket_.async_read_some(asio::buffer(session.buffer, session.buffer.size()),
 		[this, id = session.id](asio::error_code ec, size_t length){
 			if(!ec){
@@ -46,10 +48,19 @@ void net::Session_manager::receive_callback(uint64_t id, size_t length){
 		return;
 
 	Session& session = *it->second;
-	reset_timer(session);
 	session.request.append(session.buffer.data(), length);
-	if(session.request.find("\r\n\r\n") != string::npos || session.request.size() >= 1*MB){
-		context.http_handler.process_request(session, std::move(session.request));
+	if(session.request.find("\r\n\r\n") != string::npos || session.request.size() >= 256*KB){
+		for(char ch : session.request){
+			if(ch == '\n')
+				std::cout << "\033[34m\\n\033[0m\n";
+			else if(ch == '\r')
+				std::cout << "\033[31m\\r\033[0m";
+			else 
+				std::cout << ch;
+		}
+		std::cout << std::endl;
+		http::Http_request request(std::move(session.request));
+		context.http_handler.process_request(session, std::move(request));
 	}
 	
 	start_receive(session);

@@ -9,37 +9,25 @@
 #include "file/file_data.h"
 
 #include <iostream>
-#include <sstream>
-
-using std::string;
 
 http::Http_handler::Http_handler(core::Server_context& context): context(context){}
 http::Http_handler::~Http_handler(){}
 
-void http::Http_handler::print_request(const string& request){
-	for(char ch : request){
-		if(ch == '\n')
-			std::cout << "\033[34m\\n\033[0m\n";
-		else if(ch == '\r')
-			std::cout << "\033[31m\\r\033[0m";
-		else 
-			std::cout << ch;
+
+void http::Http_handler::process_request(net::Session& session, Http_request&& request){
+	switch(request.method){
+		case http::Http_method::GET:
+			send_http_request(session, 200, request.url);
+		break;
+		case http::Http_method::POST:
+			std::cout << "\033[32m" << request.body << "\033[0m\n";
+		break;
+		default:
+			send_error_http_request(session, 405);
 	}
 }
 
-void http::Http_handler::process_request(net::Session& session, string&& request){
-	print_request(request);
-
-	std::istringstream iss(request);
-	string method, request_path;
-	iss >> method >> request_path;
-	if(method == "GET")
-		send_http_request(session, 200, request_path);
-	else
-		send_error_http_request(session, 405);
-}
-
-static string create_http_request(int http_code, const file::File_data& file){
+static std::string create_http_request(int http_code, const file::File_data& file){
 	return 
 		"HTTP/1.1 " + std::to_string(http_code) + ' ' + http::get_description(http_code) + "\r\n"
 		"Content-Type: " + http::get_mime(file.extension) + "; charset=UTF-8\r\n"

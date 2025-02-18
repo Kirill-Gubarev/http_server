@@ -15,13 +15,12 @@ namespace net{
 		const uint64_t id;
 		tcp::socket socket_;
 		std::array<char, 4*KB> buffer;
-		std::string request;
+		string request;
 		asio::steady_timer timer;
 
-		explicit Session(uint64_t id, tcp::socket&& socket_);
+		Session(uint64_t id, tcp::socket&& socket_);
 		Session(const Session& other) = delete;
 		Session operator=(const Session& other) = delete;
-		~Session();
 	};
 }
 #endif//SESSION_H

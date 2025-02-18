@@ -3,6 +3,7 @@
 
 #include "core/server_context.h"
 #include <string>
+#include "http/http_request.h"
 
 namespace http{
 	using std::string;
@@ -17,11 +18,9 @@ namespace http{
 		Http_handler operator=(const Http_handler& other) = delete;	
 		~Http_handler();
 
-		void process_request(net::Session& session, string&& request);
+		void process_request(net::Session& session, Http_request&& request);
 
 	private:
-		void print_request(const string& request);
-
 		void send_http_request(net::Session& session, int http_code, const string& request_path);
 		void send_error_http_request(net::Session& session, int http_code);
 	};

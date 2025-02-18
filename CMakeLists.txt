@@ -27,6 +27,7 @@ ADD_EXECUTABLE(${PROJECT_NAME}
 	src/file/file_data.cpp			src/file/file_data.h
 
 	src/http/http_handler.cpp		src/http/http_handler.h
+	src/http/http_request.cpp		src/http/http_request.h
 	src/http/http_utils.cpp			src/http/http_utils.h
 	src/http/http_routing.cpp		src/http/http_routing.h
 
