@@ -1,4 +1,4 @@
-CMAKE_MINIMUM_REQUIRED(VERSION 3.28)
+CMAKE_MINIMUM_REQUIRED(VERSION 3.23)
 PROJECT(http_server)
 
 set(CMAKE_CXX_STANDARD 17)
@@ -33,3 +33,4 @@ ADD_EXECUTABLE(${PROJECT_NAME}
 
 	src/html/html_renderer.cpp		src/html/html_renderer.h
 )
+TARGET_LINK_LIBRARIES(http_server pthread)

@@ -25,12 +25,12 @@ core::Server::~Server(){
 	stop();
 }
 
-void core::Server::start(){
+void core::Server::start(uint16_t port){
 	if(is_running) return;
 	is_running = true;
 
 	std::cout << "starting the server..." << std::endl;
-	context.network_engine.async_start(80);
+	context.network_engine.async_start(port);
 	context.command_line.start();
 }
 void core::Server::stop(){

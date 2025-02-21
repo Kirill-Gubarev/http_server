@@ -6,6 +6,7 @@
 #include <string>
 #include <unordered_map>
 #include <functional>
+#include <sstream>
 
 namespace ctrl{
 	using std::string;
@@ -16,7 +17,7 @@ namespace ctrl{
 		bool is_running;
 		std::unordered_map<
 			std::string, 
-			std::function<int(const char*)>> commands_map;
+			std::function<int(std::istringstream&)>> commands_map;
 		void commands_map_init();
 
 	public:
@@ -27,11 +28,6 @@ namespace ctrl{
 
 		void start();
 		void stop();
-
-	private:
-		void handle_command(std::function<int(const char*)> func, const char* command);
-		std::string static get_first_word(const std::string& str);
-		void static skip_spaces(const char*& ptr);
 	};
 }
 

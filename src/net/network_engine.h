@@ -27,14 +27,13 @@ namespace net{
 		Network_engine(const Network_engine& other) = delete;
 		Network_engine& operator=(const Network_engine& other) = delete;
 
-		bool async_start(uint16_t port = 80);
-		bool stop();
-		bool stop(const string& message);
-		bool restart();
+		int async_start(uint16_t port);
+		int stop();
+		int restart(uint16_t port);
 
 	private:
 		void start_async_accept();
-		void acceptor_init(uint16_t port);
+		int acceptor_init(uint16_t port);
 	};
 }
 
