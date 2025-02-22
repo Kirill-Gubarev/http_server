@@ -21,8 +21,9 @@ namespace http{
 		void process_request(net::Session& session, Http_request&& request);
 
 	private:
-		void send_http_request(net::Session& session, int http_code, const string& request_path);
+		void send_http_request(net::Session& session, int http_code, const string& url);
 		void send_error_http_request(net::Session& session, int http_code);
+		bool is_allowed_path(const string& path) const;
 	};
 }
 

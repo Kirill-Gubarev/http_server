@@ -1,5 +1,6 @@
 #include "http/http_handler.h"
 
+#include "http/http_request.h"
 #include "net/session.h"
 #include "net/session_manager.h"
 #include "file/file_cacher.h"
@@ -34,15 +35,33 @@ static std::string create_http_request(int http_code, const file::File_data& fil
 		"Content-Length: " + std::to_string(file.content.size()) + "\r\n"
 		"Connection: close\r\n\r\n";
 }
-void http::Http_handler::send_http_request(net::Session& session, int http_code, const string& request_path){
-	std::error_code ec;
-	string file_path = get_route_file_path(request_path, ec);
-	if(ec){
-		send_error_http_request(session, 404);
-		return;
+void http::Http_handler::send_http_request(net::Session& session, int http_code, const string& url){
+	string request_path = "";
+	if(!url.empty())
+		request_path = url.substr(1);
+	string file_path;
+
+	const file::File_data* file_ptr;
+	if(get_route_file_path(request_path, &file_path)){
+		file_ptr = context.file_cacher.get_file_ptr("assets/" + file_path);
+	}
+	else{
+		file_path = "assets/" + request_path;
+		if(!is_allowed_path(file_path)){
+			send_error_http_request(session, 403);	
+			return;
+		}
+		file_ptr = context.file_cacher.get_file_ptr(file_path);
+		if(!file_ptr){
+			file_path += ".html";
+			if(!is_allowed_path(file_path)){
+				send_error_http_request(session, 403);	
+				return;
+			}
+			file_ptr = context.file_cacher.get_file_ptr(file_path);
+		}
 	}
 
-	const file::File_data* file_ptr = context.file_cacher.get_file_ptr("assets/" + file_path);
 	if(!file_ptr){
 		send_error_http_request(session, 404);
 		return;
@@ -56,4 +75,9 @@ void http::Http_handler::send_error_http_request(net::Session& session, int http
 	context.html_renderer.render_error_page(http_code, &file);
 	context.session_manager.send_copy(session, create_http_request(http_code, file));
 	context.session_manager.send_copy(session, file.content);
+}
+bool http::Http_handler::is_allowed_path(const string& path) const{
+	return path.find("..") == string::npos && 
+		path.find("~") == string::npos &&
+		path.find("//") == string::npos;
 }

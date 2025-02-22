@@ -3,22 +3,16 @@
 #include <unordered_map>
 
 namespace http{
-
-static std::unordered_map<string, string> routes = {
-	{"/",				"index.html"},
-	{"/favicon.ico",	"favicon.ico"},
-	{"/clicker",		"clicker.html"},
-	{"/clicker.js",		"clicker.js"},
-	{"/monkey.webm",	"monkey.webm"}
-};
-
-string get_route_file_path(const string& request_path, std::error_code& ec){
-	auto it = routes.find(request_path);
-	if(it == routes.end()){
-		ec = std::make_error_code(std::errc::invalid_argument);
-		return "";
-	}
-	return it->second;	
+	static std::unordered_map<string, string> routes = {
+		{"", "index.html"}
+	};
 }
 
-}// namespce http
+int http::get_route_file_path(const string& request_path, string* file_path){
+	auto it = routes.find(request_path);
+	if(it == routes.end())
+		return 0;
+	*file_path = it->second;	
+	return 1;
+}
+
