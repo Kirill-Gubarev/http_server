@@ -8,7 +8,11 @@ utils::Str_handler::iterator utils::Str_handler::end()const{
 	return iterator(str, string_view::npos);
 }
 void utils::Str_handler::skip_first_word(){
-	str = str.substr(begin().get_pos());	
+	size_t pos = begin().get_pos();	
+	if(pos != string_view::npos)
+		str = str.substr(pos);	
+	else
+		str = "";
 }
 std::string utils::Str_handler::get_first_word()const{
 	return string(*begin());

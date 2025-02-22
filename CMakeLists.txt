@@ -36,5 +36,6 @@ ADD_EXECUTABLE(${PROJECT_NAME}
 
 	src/utils/str_handler.cpp		src/utils/str_handler.h
 	src/utils/str_iterator.cpp
+	src/utils/str_utils.hpp
 )
 TARGET_LINK_LIBRARIES(${PROJECT_NAME} pthread)

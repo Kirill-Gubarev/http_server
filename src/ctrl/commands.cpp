@@ -3,18 +3,15 @@
 #include "net/network_engine.h"
 #include "net/session_manager.h"
 #include "utils/str_handler.h"
+#include "utils/str_utils.hpp"
 
-#include <charconv>
 #include <iostream>
 
 void ctrl::Command_line::commands_map_init(){
 	commands_map = {
 		{"start", [this](utils::Str_handler& command)->int{
-			string port_str = command.get_first_word();
 			uint16_t port;
-
-			auto [ptr, ec] = std::from_chars(port_str.data(), port_str.data() + port_str.size(), port);
-			if(ec == std::errc())
+			if(utils::parse(command.get_first_word(), &port))
 				context.network_engine.async_start(port);
 			else
 				context.network_engine.async_start(80);
@@ -25,11 +22,8 @@ void ctrl::Command_line::commands_map_init(){
 			return 0;
 		}},
 		{"restart", [this](utils::Str_handler& command)->int{
-			string port_str = command.get_first_word();
 			uint16_t port;
-
-			auto [ptr, ec] = std::from_chars(port_str.data(), port_str.data() + port_str.size(), port);
-			if(ec == std::errc())
+			if(utils::parse(command.get_first_word(), &port))
 				context.network_engine.restart(port);
 			else
 				context.network_engine.restart(80);

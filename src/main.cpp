@@ -1,7 +1,5 @@
 #include "core/server.h"
-
-#include <cstdint>
-#include <charconv>
+#include "utils/str_utils.hpp"
 
 core::Server server;
 
@@ -12,8 +10,7 @@ int main(int argc, char* argv[]){
 	}
 
 	uint16_t port;
-	auto [ptr, ec] = std::from_chars(argv[1], argv[1] + strlen(argv[1]), port);
-	if(ec == std::errc())
+	if(utils::parse(argv[1], &port))
 		server.start(port);
 	else
 		server.start(80);
