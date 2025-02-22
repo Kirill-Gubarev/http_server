@@ -2,11 +2,11 @@
 #define COMMAND_LINE_H
 
 #include "core/server_context.h"
+#include "utils/str_handler.h"
 
 #include <string>
 #include <unordered_map>
 #include <functional>
-#include <sstream>
 
 namespace ctrl{
 	using std::string;
@@ -17,7 +17,7 @@ namespace ctrl{
 		bool is_running;
 		std::unordered_map<
 			std::string, 
-			std::function<int(std::istringstream&)>> commands_map;
+			std::function<int(utils::Str_handler&)>> commands_map;
 		void commands_map_init();
 
 	public:

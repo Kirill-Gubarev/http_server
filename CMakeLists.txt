@@ -18,6 +18,7 @@ ADD_EXECUTABLE(${PROJECT_NAME}
 									src/core/server_context.h
 
 	src/ctrl/command_line.cpp		src/ctrl/command_line.h
+	src/ctrl/commands.cpp
 
 	src/net/network_engine.cpp		src/net/network_engine.h
 	src/net/session_manager.cpp		src/net/session_manager.h
@@ -32,5 +33,8 @@ ADD_EXECUTABLE(${PROJECT_NAME}
 	src/http/http_routing.cpp		src/http/http_routing.h
 
 	src/html/html_renderer.cpp		src/html/html_renderer.h
+
+	src/utils/str_handler.cpp		src/utils/str_handler.h
+	src/utils/str_iterator.cpp
 )
-TARGET_LINK_LIBRARIES(http_server pthread)
+TARGET_LINK_LIBRARIES(${PROJECT_NAME} pthread)
