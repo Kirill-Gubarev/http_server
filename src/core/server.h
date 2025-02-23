@@ -32,7 +32,7 @@ namespace core{
 		Server& operator=(const Server& other) = delete;
 		~Server();
 
-		void start(uint16_t port);
+		void run(uint16_t port);
 		void stop();
 	};
 }

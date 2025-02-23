@@ -21,6 +21,7 @@ ADD_EXECUTABLE(${PROJECT_NAME}
 	src/ctrl/commands.cpp
 
 	src/net/network_engine.cpp		src/net/network_engine.h
+	src/net/io_context_wrapper.cpp	src/net/io_context_wrapper.h
 	src/net/session_manager.cpp		src/net/session_manager.h
 	src/net/session.cpp				src/net/session.h
 

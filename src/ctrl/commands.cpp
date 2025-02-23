@@ -12,9 +12,9 @@ void ctrl::Command_line::commands_map_init(){
 		{"start", [this](utils::Str_handler& command)->int{
 			uint16_t port;
 			if(utils::parse(command.get_first_word(), &port))
-				context.network_engine.async_start(port);
+				context.network_engine.start(port);
 			else
-				context.network_engine.async_start(80);
+				context.network_engine.start(80);
 			return 0;
 		}},
 		{"stop", [this](utils::Str_handler& command)->int{

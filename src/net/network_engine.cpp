@@ -5,31 +5,23 @@
 #include <iostream>
 
 net::Network_engine::Network_engine(core::Server_context& context):
-	io_context_ptr(nullptr), acceptor_ptr(nullptr), 
-	context(context), is_running(false){}
+	acceptor_ptr(nullptr), context(context), is_running(false){}
 
 net::Network_engine::~Network_engine(){}
 
-int net::Network_engine::async_start(uint16_t port){
+int net::Network_engine::start(uint16_t port){
 	if(is_running) return 0;
 	is_running = true;
 	std::cout << "starting the network_engine...\n";
 
-	if(!io_context_ptr){
-		io_context_ptr = std::make_unique<asio::io_context>();
-		acceptor_ptr = std::make_unique<tcp::acceptor>(*io_context_ptr);
-	}
+	io_context_wrapper.init();
 	if(!acceptor_init(port)){
 		stop();
 		return 0;
 	}
 	start_async_accept();
+	io_context_wrapper.start();
 
-	io_context_thread = std::thread([this](){
-		io_context_ptr->run();
-		std::cout << "io_context has completed its work" << std::endl;
-	});
-	io_context_thread.detach();
 	return 1;
 }
 int net::Network_engine::stop(){
@@ -37,18 +29,20 @@ int net::Network_engine::stop(){
 	is_running = false;
 	std::cout << "stopping the network_engine...\n";
 	
+	io_context_wrapper.stop();
 	context.session_manager.clear();
-	io_context_ptr->stop();
 	acceptor_ptr->close();
-	io_context_ptr.reset(nullptr);
 	acceptor_ptr.reset(nullptr);
+	io_context_wrapper.reset();
 	return 1;
 }
 int net::Network_engine::restart(uint16_t port){
-	return stop() && async_start(port);
+	return stop() && start(port);
 }
 int net::Network_engine::acceptor_init(uint16_t port){
 	asio::error_code ec;
+	if(!acceptor_ptr)
+		acceptor_ptr = std::make_unique<tcp::acceptor>(io_context_wrapper.get());
 		
 	acceptor_ptr->open(tcp::v4(), ec);
 	if(ec){

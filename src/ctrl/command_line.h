@@ -26,7 +26,7 @@ namespace ctrl{
 		Command_line& operator=(const Command_line& other) = delete;
 		~Command_line();
 
-		void start();
+		void run();
 		void stop();
 	};
 }

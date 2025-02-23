@@ -2,10 +2,10 @@
 #define NETWORK_ENGINE_H
 
 #include "core/server_context.h"
+#include "net/io_context_wrapper.h"
 
 #include <asio.hpp>
 #include <cstdint>
-#include <thread>
 #include <string>
 #include <memory>
 
@@ -15,10 +15,9 @@ namespace net{
 
 	class Network_engine{
 	private:
-		std::unique_ptr<asio::io_context> io_context_ptr;
+		Io_context_wrapper io_context_wrapper;	
 		std::unique_ptr<tcp::acceptor> acceptor_ptr;
 		core::Server_context& context;
-		std::thread io_context_thread;
 		bool is_running;
 
 	public:
@@ -27,7 +26,7 @@ namespace net{
 		Network_engine(const Network_engine& other) = delete;
 		Network_engine& operator=(const Network_engine& other) = delete;
 
-		int async_start(uint16_t port);
+		int start(uint16_t port);
 		int stop();
 		int restart(uint16_t port);
 

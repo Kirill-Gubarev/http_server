@@ -11,7 +11,7 @@ ctrl::Command_line::~Command_line(){
 	stop();
 }
 
-void ctrl::Command_line::start(){
+void ctrl::Command_line::run(){
 	is_running = true;
 	std::string input = "";
 	while(is_running && std::getline(std::cin, input)){
