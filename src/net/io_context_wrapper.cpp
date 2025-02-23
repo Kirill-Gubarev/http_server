@@ -3,7 +3,7 @@
 #include <iostream>
 
 net::Io_context_wrapper::Io_context_wrapper():
-	io_context_ptr(nullptr){}
+	io_context_ptr(nullptr), is_running(false){}
 net::Io_context_wrapper::~Io_context_wrapper(){
 	stop();
 }
@@ -17,17 +17,20 @@ asio::io_context& net::Io_context_wrapper::get()const{
 }
 
 void net::Io_context_wrapper::start(){
-	thread = std::thread(&Io_context_wrapper::thread_func, this);
-}
-void net::Io_context_wrapper::thread_func(){
-	if(io_context_ptr){
-		io_context_ptr->run();
-		std::cout << "io_context has completed its work" << std::endl;
+	if(io_context_ptr && !is_running){
+		is_running = true;
+		thread = std::thread(&Io_context_wrapper::thread_func, this);
 	}
 }
+void net::Io_context_wrapper::thread_func(){
+	io_context_ptr->run();
+	std::cout << "io_context has completed its work" << std::endl;
+}
 void net::Io_context_wrapper::stop(){
-	if(io_context_ptr)
+	if(io_context_ptr && is_running){
+		is_running = false;
 		io_context_ptr->stop();	
+	}
 }
 void net::Io_context_wrapper::reset(){
 	stop();

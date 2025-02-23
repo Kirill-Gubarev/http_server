@@ -8,6 +8,7 @@
 #include <cstdint>
 #include <string>
 #include <memory>
+#include <vector>
 
 namespace net{
 	using std::string;
@@ -16,7 +17,7 @@ namespace net{
 	class Network_engine{
 	private:
 		Io_context_wrapper io_context_wrapper;	
-		std::unique_ptr<tcp::acceptor> acceptor_ptr;
+		std::vector<std::unique_ptr<tcp::acceptor>> acceptors;
 		core::Server_context& context;
 		bool is_running;
 
@@ -31,7 +32,7 @@ namespace net{
 		int restart(uint16_t port);
 
 	private:
-		void start_async_accept();
+		void start_async_accept(tcp::acceptor* acceptor_ptr);
 		int acceptor_init(uint16_t port);
 	};
 }

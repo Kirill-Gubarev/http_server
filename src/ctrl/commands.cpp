@@ -11,10 +11,13 @@ void ctrl::Command_line::commands_map_init(){
 	commands_map = {
 		{"start", [this](utils::Str_handler& command)->int{
 			uint16_t port;
-			if(utils::parse(command.get_first_word(), &port))
+			if(utils::parse(command.next_word(), &port))
 				context.network_engine.start(port);
 			else
 				context.network_engine.start(80);
+			while(utils::parse(command.next_word(), &port)){
+				context.network_engine.start(port);
+			}
 			return 0;
 		}},
 		{"stop", [this](utils::Str_handler& command)->int{
@@ -23,10 +26,13 @@ void ctrl::Command_line::commands_map_init(){
 		}},
 		{"restart", [this](utils::Str_handler& command)->int{
 			uint16_t port;
-			if(utils::parse(command.get_first_word(), &port))
+			if(utils::parse(command.next_word(), &port))
 				context.network_engine.restart(port);
 			else
 				context.network_engine.restart(80);
+			while(utils::parse(command.next_word(), &port)){
+				context.network_engine.start(port);
+			}
 			return 0;
 		}},
 		{"exit", [this](utils::Str_handler& command)->int{

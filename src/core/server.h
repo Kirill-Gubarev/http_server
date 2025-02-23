@@ -9,8 +9,6 @@
 #include "html/html_renderer.h"
 #include "file/file_cacher.h"
 
-#include <cstdint>
-
 namespace core{
 	class Server{
 	friend class Server_context;
@@ -32,7 +30,7 @@ namespace core{
 		Server& operator=(const Server& other) = delete;
 		~Server();
 
-		void run(uint16_t port);
+		void run(char** ports, int port_num);
 		void stop();
 	};
 }

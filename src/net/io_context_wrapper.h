@@ -8,6 +8,7 @@
 namespace net{
 	class Io_context_wrapper{
 	private:
+		bool is_running;
 		std::unique_ptr<asio::io_context> io_context_ptr;
 		std::thread thread;
 

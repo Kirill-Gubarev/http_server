@@ -1,8 +1,10 @@
 #include "core/server.h"
 
 #include "def/memory_units.h"
+#include "utils/str_utils.hpp"
 
 #include <iostream>
+#include <cstdint>
 
 core::Server::Server():
 	command_line(context),
@@ -25,12 +27,16 @@ core::Server::~Server(){
 	stop();
 }
 
-void core::Server::run(uint16_t port){
+void core::Server::run(char** ports, int port_num){
 	if(is_running) return;
 	is_running = true;
 
 	std::cout << "starting the server..." << std::endl;
-	context.network_engine.start(port);
+	for(size_t i = 0; i < port_num; ++i){
+		uint16_t port;
+		if(utils::parse(ports[i], &port))
+			context.network_engine.start(port);
+	}
 	context.command_line.run();
 }
 void core::Server::stop(){
