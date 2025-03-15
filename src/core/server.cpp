@@ -13,7 +13,9 @@ core::Server::Server():
 	http_handler(context), 
 	html_renderer(context),
 	file_cacher(512*MB),
-	context(*this){}
+	context(*this){
+	db_manager.connect();
+}
 
 core::Server_context::Server_context(Server& server):
 	command_line(server.command_line),
@@ -21,7 +23,8 @@ core::Server_context::Server_context(Server& server):
 	session_manager(server.session_manager), 
 	http_handler(server.http_handler), 
 	html_renderer(server.html_renderer),
-	file_cacher(server.file_cacher){}
+	file_cacher(server.file_cacher),
+	db_manager(server.db_manager){}
 
 core::Server::~Server(){
 	stop();

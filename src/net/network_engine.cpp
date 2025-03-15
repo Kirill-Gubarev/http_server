@@ -80,3 +80,6 @@ void net::Network_engine::start_async_accept(tcp::acceptor* acceptor_ptr){
 		}
 	);	
 }
+asio::io_context& net::Network_engine::get_io_context(){
+	return io_context_wrapper.get();
+}

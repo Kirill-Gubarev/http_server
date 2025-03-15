@@ -38,5 +38,7 @@ ADD_EXECUTABLE(${PROJECT_NAME}
 	src/utils/str_handler.cpp		src/utils/str_handler.h
 	src/utils/str_iterator.cpp
 	src/utils/str_utils.hpp
+
+	src/db/db_manager.cpp			src/db/db_manager.h
 )
-TARGET_LINK_LIBRARIES(${PROJECT_NAME} pthread)
+TARGET_LINK_LIBRARIES(${PROJECT_NAME} pthread pqxx)

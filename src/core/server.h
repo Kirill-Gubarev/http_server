@@ -8,6 +8,7 @@
 #include "http/http_handler.h"
 #include "html/html_renderer.h"
 #include "file/file_cacher.h"
+#include "db/db_manager.h"
 
 namespace core{
 	class Server{
@@ -22,6 +23,7 @@ namespace core{
 		http::Http_handler http_handler;
 		html::Html_renderer html_renderer;
 		file::File_cacher file_cacher;
+		db::db_manager db_manager;
 		Server_context context;
 
 	public:

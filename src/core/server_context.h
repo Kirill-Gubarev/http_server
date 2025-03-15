@@ -6,6 +6,7 @@ namespace net{class Network_engine; class Session_manager; class Session;}
 namespace http{class Http_handler;}
 namespace html{class Html_renderer;}
 namespace file{class File_cacher;}
+namespace db{class db_manager;}
 
 namespace core{
 	class Server;
@@ -16,6 +17,7 @@ namespace core{
 		http::Http_handler& http_handler;
 		html::Html_renderer& html_renderer;
 		file::File_cacher& file_cacher;
+		db::db_manager& db_manager;
 
 		explicit Server_context(Server& server);
 		Server_context(const Server_context& other) = delete;

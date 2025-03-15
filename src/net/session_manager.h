@@ -25,7 +25,7 @@ namespace net{
 		~Session_manager();	
 		
 		void create_session(tcp::socket&& socket_);
-		size_t delete_session(uint64_t id);
+		void delete_session(uint64_t id);
 		size_t size()const;
 		void clear();
 

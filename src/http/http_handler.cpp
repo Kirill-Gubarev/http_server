@@ -8,25 +8,12 @@
 #include "http/http_routing.h"
 #include "html/html_renderer.h"
 #include "file/file_data.h"
+#include "db/db_manager.h"
 
 #include <iostream>
 
 http::Http_handler::Http_handler(core::Server_context& context): context(context){}
 http::Http_handler::~Http_handler(){}
-
-
-void http::Http_handler::process_request(net::Session& session, Http_request&& request){
-	switch(request.method){
-		case http::Http_method::GET:
-			send_http_request(session, 200, request.url);
-		break;
-		case http::Http_method::POST:
-			std::cout << "\033[32m" << request.body << "\033[0m\n";
-		break;
-		default:
-			send_error_http_request(session, 405);
-	}
-}
 
 static std::string create_http_request(int http_code, const file::File_data& file){
 	return 
@@ -35,6 +22,31 @@ static std::string create_http_request(int http_code, const file::File_data& fil
 		"Content-Length: " + std::to_string(file.content.size()) + "\r\n"
 		"Connection: close\r\n\r\n";
 }
+static std::string create_http_request_fruits(int http_code, const std::string& fruits) {
+    return 
+        "HTTP/1.1 " + std::to_string(http_code) + ' ' + http::get_description(http_code) + "\r\n" + 
+        "Content-Type: application/json; charset=UTF-8\r\n" + 
+        "Content-Length: " + std::to_string(fruits.size()) + "\r\n" + 
+        "Access-Control-Allow-Origin: *\r\n" + 
+        "Access-Control-Allow-Methods: GET\r\n" + 
+        "Access-Control-Allow-Headers: Content-Type\r\n" + 
+        "Cache-Control: no-cache\r\n" + 
+        "Connection: close\r\n\r\n" + 
+        fruits;
+}
+
+void http::Http_handler::process_request(net::Session& session, Http_request&& request){
+	switch(request.method){
+		case http::Http_method::GET:
+			send_http_request(session, 200, request.url);
+		break;
+		case http::Http_method::POST:
+		break;
+		default:
+			send_error_http_request(session, 405);
+	}
+}
+
 void http::Http_handler::send_http_request(net::Session& session, int http_code, const string& url){
 	string request_path = "";
 	if(!url.empty())
@@ -44,6 +56,11 @@ void http::Http_handler::send_http_request(net::Session& session, int http_code,
 	const file::File_data* file_ptr;
 	if(get_route_file_path(request_path, &file_path)){
 		file_ptr = context.file_cacher.get_file_ptr("assets/" + file_path);
+	}
+	else if(request_path == "fruits"){
+		std::cout << create_http_request_fruits(200, context.db_manager.get_fruits()) << std::endl;
+		context.session_manager.send_copy(session, create_http_request_fruits(
+					200, context.db_manager.get_fruits()));
 	}
 	else{
 		file_path = "assets/" + request_path;

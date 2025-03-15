@@ -30,6 +30,7 @@ namespace net{
 		int start(uint16_t port);
 		int stop();
 		int restart(uint16_t port);
+		asio::io_context& get_io_context();
 
 	private:
 		void start_async_accept(tcp::acceptor* acceptor_ptr);

@@ -4,6 +4,7 @@
 #include "net/session.h"
 #include "http/http_handler.h"
 #include "http/http_request.h"
+#include "network_engine.h"
 
 net::Session_manager::Session_manager(core::Server_context& context):
 	context(context){}
@@ -15,8 +16,10 @@ void net::Session_manager::create_session(tcp::socket&& socket_){
 	if(inserted)
 		start_receive(*it->second);
 }
-size_t net::Session_manager::delete_session(uint64_t id){
-	return session_map.erase(id);
+void net::Session_manager::delete_session(uint64_t id){
+	asio::post(context.network_engine.get_io_context(), [this, id = id](){
+		session_map.erase(id);
+	});
 }
 size_t net::Session_manager::size()const{
 	return session_map.size();
@@ -95,7 +98,9 @@ void net::Session_manager::start_send(Session& session, PTR data_ptr, size_t sta
 void net::Session_manager::reset_timer(Session& session){
     session.timer.expires_after(std::chrono::seconds(10));
     session.timer.async_wait([this, id = session.id](const asio::error_code& ec) {
-        if(!ec && delete_session(id))
+        if(!ec){
+			delete_session(id);
 			std::cout << "timeout reached, session closed" << std::endl;
+		}
     });
 }
