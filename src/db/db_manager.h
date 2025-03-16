@@ -16,6 +16,9 @@ namespace db{
 
 		int connect();	
 		std::string get_fruits() const;
+		std::string get_user(std::string login, std::string password);
+		int create_user(std::string login, std::string password, 
+				std::string email, std::string fullname, float balance);
 	};
 }
 

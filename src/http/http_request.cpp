@@ -52,5 +52,6 @@ http::Http_method http::Http_request::string_to_method(const string& str){
 	if (str == "POST") return Http_method::POST;
 	if (str == "PUT") return Http_method::PUT;
 	if (str == "DELETE") return Http_method::DELETE;
+	if (str == "OPTIONS") return Http_method::OPTIONS;
 	return Http_method::UNKNOWN;	
 }

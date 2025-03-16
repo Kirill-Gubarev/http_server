@@ -14,6 +14,7 @@ namespace http{
 		POST,
 		PUT,
 		DELETE,
+		OPTIONS
 	};
 
 	struct Http_request{

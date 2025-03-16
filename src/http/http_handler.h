@@ -24,6 +24,8 @@ namespace http{
 		void send_http_request(net::Session& session, int http_code, const string& url);
 		void send_error_http_request(net::Session& session, int http_code);
 		bool is_allowed_path(const string& path) const;
+
+		void log_reg(net::Session& session, Http_request& request)const;
 	};
 }
 

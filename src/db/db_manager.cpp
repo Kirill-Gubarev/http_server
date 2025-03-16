@@ -51,3 +51,61 @@ std::string db::db_manager::get_fruits() const{
 		return "";
 	}
 }
+int db::db_manager::create_user(std::string login, std::string password, 
+                std::string email, std::string fullname, float balance) {
+    if (connection_ptr->is_open()) {
+        pqxx::work work(*connection_ptr);
+        
+        pqxx::result result = work.exec_params(R"(
+            SELECT 1 FROM users WHERE login = $1
+        )", login);
+        
+        if (!result.empty()) {
+            return 0;
+        }
+        
+        // Если логин не занят, создаем нового пользователя
+        try {
+            work.exec_params(R"(
+                INSERT INTO users (login, password, email, fullname, balance)
+                VALUES ($1, $2, $3, $4, $5)
+            )", login, password, email, fullname, balance);
+            work.commit();
+            return 1; // Пользователь успешно создан
+        } catch (const std::exception& e) {
+            // Ошибка при вставке данных
+            return 0;
+        }
+    } else {
+        // Если соединение с БД не установлено
+        return 0;
+    }
+}
+std::string db::db_manager::get_user(std::string login, std::string password) {
+    if (connection_ptr->is_open()) {
+        pqxx::work work(*connection_ptr);
+        pqxx::result result = work.exec_params(R"(
+            SELECT login, email, fullname, balance
+            FROM users
+            WHERE login = $1 AND password = $2
+        )", login, password);
+
+        std::string result_str = "";
+        if (!result.empty()) {
+            const auto& row = result[0];
+            result_str += "{\"success\":true,";
+            result_str += "\"login\": \"" + row["login"].as<std::string>() + "\", ";
+            result_str += "\"email\": \"" + row["email"].as<std::string>() + "\", ";
+            result_str += "\"fullname\": \"" + row["fullname"].as<std::string>() + "\", ";
+            result_str += "\"balance\": " + std::to_string(row["balance"].as<double>()) + " ";
+            result_str += "}";
+        }else{
+			result_str = "{\"success\":false}";
+		}
+
+        return result_str;
+    }
+    else {
+        return "";
+    }
+}
