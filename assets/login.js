@@ -27,7 +27,7 @@ document.addEventListener("DOMContentLoaded", function () {
         const password = document.getElementById("password").value;
         const action = "login";
 
-        fetch("localhost/login", {
+        fetch("login", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"
@@ -65,7 +65,7 @@ document.addEventListener("DOMContentLoaded", function () {
             return;
         }
 
-        fetch("localhost/register", {
+        fetch("register", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"
@@ -78,7 +78,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 localStorage.setItem("user", JSON.stringify(data));
                 window.location.href = "index.html";
             } else {
-                alert("Ошибка регистрации: имя пользователя занято или другие данные неверны.");
+                alert("Ошибка регистрации: имя пользователя занято");
             }
         })
         .catch(error => {

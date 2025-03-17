@@ -19,6 +19,9 @@ namespace db{
 		std::string get_user(std::string login, std::string password);
 		int create_user(std::string login, std::string password, 
 				std::string email, std::string fullname, float balance);
+		int add_product_to_cart(std::string login, std::string product, int quantity);
+		int remove_from_cart(std::string login, std::string product);
+		std::string get_cart_products(std::string login);
 	};
 }
 

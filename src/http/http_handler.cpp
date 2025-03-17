@@ -36,13 +36,11 @@ static std::string create_http_request_json(int http_code, const std::string& js
         json;
 }
 
-void http::Http_handler::log_reg(net::Session& session, Http_request& request)const{
+void http::Http_handler::post(net::Session& session, Http_request& request)const{
 	try{
 		nlohmann::json json = nlohmann::json::parse(request.body);
 		string action = json["action"];
-		std::cout << "MONKEY";
 		if(action == "login"){
-		std::cout << "MONKEYlog";
 			context.session_manager.send_copy(session,
 				create_http_request_json(
 					200, 
@@ -50,11 +48,9 @@ void http::Http_handler::log_reg(net::Session& session, Http_request& request)co
 					));
 		}
 		else if(action == "registration"){
-		std::cout << "MONKEYreg";
 			if(context.db_manager.create_user(
 						json["login"], json["password"],json["email"],json["fullname"], 5000)){
-			context.session_manager.send_copy(session,
-				create_http_request_json(200, 
+			context.session_manager.send_copy(session, create_http_request_json(200, 
 					context.db_manager.get_user(json["login"], json["password"])
 					));
 			}
@@ -62,6 +58,29 @@ void http::Http_handler::log_reg(net::Session& session, Http_request& request)co
 				context.session_manager.send_copy(session,
 					create_http_request_json(200, "{\"success\":false}"));
 			}
+		}
+		else if(action == "add_cart"){
+			if(context.db_manager.add_product_to_cart(json["login"], json["product"], json["quantity"].get<int>())){
+				context.session_manager.send_copy(session,
+					create_http_request_json(200, "{\"success\":true}"));
+			}
+			else{
+				context.session_manager.send_copy(session,
+					create_http_request_json(200, "{\"success\":false}"));
+			}
+		}
+		else if(action == "remove_cart"){
+			if(context.db_manager.remove_from_cart(json["login"], json["product"])){
+				context.session_manager.send_copy(session,
+					create_http_request_json(200, "{\"success\":true}"));
+			}
+			else{
+				context.session_manager.send_copy(session,
+					create_http_request_json(200, "{\"success\":false}"));
+			}
+		}
+		else if(action == "get_cart"){
+			context.session_manager.send_copy(session, create_http_request_json(200, context.db_manager.get_cart_products(json["login"])));
 		}
 	}
 	catch(std::exception& ex){
@@ -75,7 +94,7 @@ void http::Http_handler::process_request(net::Session& session, Http_request&& r
 			send_http_request(session, 200, request.url);
 		break;
 		case http::Http_method::POST:
-			log_reg(session, request);
+			post(session, request);
 		break;
 		default:
 			send_error_http_request(session, 405);

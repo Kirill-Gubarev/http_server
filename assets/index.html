@@ -15,13 +15,31 @@
             <h1>Wildmonkey.ru</h1>
         </div>
         <nav id="user-menu">
-            <a href="#"><i class="fas fa-shopping-cart"></i> Корзина</a>
-            <a href="login.html" id="login-link"><i class="fas fa-user"></i> Войти / Зарегистрироваться</a>
+            <a href="login" id="cart"><i class="fas fa-shopping-cart"></i> Корзина</a>
+            <a href="login" id="login-link"><i class="fas fa-user"></i> Войти / Зарегистрироваться</a>
         </nav>
     </header>
     <main>
         <div class="product-list" id="product-list"></div>
     </main>
+
+    <!-- Модальное окно для добавления товара в корзину -->
+    <div id="cart-modal" class="modal">
+        <div class="modal-content">
+            <span id="close-modal" class="close">&times;</span>
+            <img id="product-image" src="" alt="Товар" />
+            <p id="product-name"></p>
+            <p>Цена: <span id="product-price"></span> руб/кг</p>
+            <p>В наличии: <span id="product-quantity"></span> кг</p> <!-- Добавлено отображение остатка -->
+            <label for="quantity">Количество:</label>
+            <input type="number" id="quantity" value="1" min="1" />
+            <div class="modal-buttons">
+                <button id="add-to-cart">Добавить</button>
+                <button id="cancel">Отмена</button>
+            </div>
+        </div>
+    </div>
+
     <script defer src="index.js"></script>
 </body>
 </html>
