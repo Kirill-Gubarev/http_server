@@ -1,17 +1,17 @@
 document.addEventListener("DOMContentLoaded", function () {
     const userMenu = document.getElementById("user-menu");
 
-    // Проверяем наличие пользователя в localStorage
+    
     const user = JSON.parse(localStorage.getItem("user"));
 
     if (user) {
-        // Обновляем меню для авторизованного пользователя
+        
         userMenu.innerHTML = `
             <span id="balance">
                 <i class="fas fa-wallet"></i> Баланс: ${user.balance} руб
             </span>
             <a href="cart" style="margin-right: 10px;"><i class="fas fa-shopping-cart"></i> Корзина</a>
-            <a href="profile.html"><i class="fas fa-user"></i> ${user.login}</a>
+            <a href="profile"><i class="fas fa-user"></i> ${user.login}</a>
         `;
     }
 });
@@ -24,7 +24,10 @@ async function fetchProducts() {
         localStorage.setItem('products', JSON.stringify(products));
 
         const productList = document.getElementById('product-list');
-        productList.innerHTML = ''; // Очистить список перед добавлением новых товаров
+        productList.innerHTML = ''; 
+
+        
+        products.sort((a, b) => a.name.localeCompare(b.name));
 
         products.forEach(product => {
             const productElement = document.createElement('div');
@@ -33,7 +36,7 @@ async function fetchProducts() {
             const productHTML = `
                 <img src="${product.image}" alt="${product.name}">
                 <p>${product.name} - ${product.price} руб/кг</p>
-                <p>В наличии: ${product.quantity} кг</p> <!-- Отображаем количество на складе -->
+                <p>В наличии: ${product.quantity} кг</p> 
                 <button class="add-to-cart-btn" data-id="${product.id}" data-name="${product.name}" data-price="${product.price}" 
                         data-image="${product.image}" data-quantity="${product.quantity}">
                     В корзину
@@ -43,10 +46,19 @@ async function fetchProducts() {
             productList.appendChild(productElement);
         });
 
-        // Добавление обработчика событий для кнопок "В корзину"
-        document.querySelectorAll('.add-to-cart-btn').forEach(button => {
-            button.addEventListener('click', openCartModal);
-        });
+        
+        if(localStorage.getItem("user")){
+            document.querySelectorAll('.add-to-cart-btn').forEach(button => {
+                button.addEventListener('click', openCartModal);
+            });
+        }
+        else{
+            document.querySelectorAll('.add-to-cart-btn').forEach(button => {
+                button.addEventListener('click', function() {
+                    window.location.href = "login";
+                });
+            });
+        }
     } catch (error) {
         console.error('Ошибка при загрузке товаров:', error);
     }
@@ -58,45 +70,45 @@ function openCartModal(event) {
     const productName = product.getAttribute('data-name');
     const productPrice = product.getAttribute('data-price');
     const productImage = product.getAttribute('data-image');
-    const productquantity = parseInt(product.getAttribute('data-quantity'), 10); // Доступное количество на складе
+    const productquantity = parseInt(product.getAttribute('data-quantity'), 10); 
 
-    // Устанавливаем данные товара в модальном окне
+    
     document.getElementById('product-name').textContent = productName;
     document.getElementById('product-price').textContent = productPrice;
     document.getElementById('product-image').src = productImage;
     document.getElementById('product-quantity').textContent = productquantity;
 
-    // Устанавливаем ограничения на ввод количества
+    
     const quantityInput = document.getElementById('quantity');
-    quantityInput.value = 1; // Сбросить на 1 при открытии
-    quantityInput.max = productquantity; // Устанавливаем максимальное значение для нового товара
+    quantityInput.value = 1; 
+    quantityInput.max = productquantity; 
 
-    // Убираем предыдущий обработчик, если он был
+    
     quantityInput.oninput = function () {
-        // Оставляем только цифры в значении
+        
         let value = this.value.replace(/[^0-9]/g, '');
 
-        // Если введенное значение больше max, устанавливаем max
+        
         if (parseInt(value, 10) > productquantity) {
             value = productquantity;
         }
 
-        // Обновляем значение в поле ввода
+        
         this.value = value;
     };
 
 
-    // Отображаем модальное окно
+    
     document.getElementById('cart-modal').style.display = 'block';
 
-    // Добавление товара в корзину
+    
     document.getElementById('add-to-cart').onclick = function() {
         const quantity = parseInt(quantityInput.value, 10);
         addToCart(productId, productName, productPrice, quantity);
         closeModal();
     };
 
-    // Закрытие модального окна
+    
     document.getElementById('cancel').onclick = closeModal;
     document.getElementById('close-modal').onclick = closeModal;
 }
@@ -117,13 +129,13 @@ function addToCart(productId, productName, productPrice, quantity) {
     cart.push(product);
     localStorage.setItem('cart', JSON.stringify(cart));
 
-    // Отправляем данные на сервер
+    
     sendCartData(productName, quantity);
 }
 
 
 async function sendCartData(productName, quantity) {
-    // Извлекаем логин пользователя из localStorage
+    
     const user = JSON.parse(localStorage.getItem('user'));
 
     if (!user) {
@@ -143,7 +155,7 @@ async function sendCartData(productName, quantity) {
         headers: {
             "Content-Type": "application/json"
         },
-        body: JSON.stringify(data),  // Отправляем данные в формате JSON
+        body: JSON.stringify(data),  
     })
     .catch(error => {
         console.error("Ошибка:", error);

@@ -1,4 +1,4 @@
-/* Общие стили */
+
 body {
     font-family: Arial, sans-serif;
     background-color: #c2b0a4;
@@ -8,7 +8,7 @@ body {
     font-size: 1rem;
 }
 
-/* Шапка */
+
 header {
     display: flex;
     justify-content: space-between;
@@ -29,7 +29,7 @@ header {
     margin-right: 0.6rem;
 }
 
-/* Навигация */
+
 nav a {
     color: white;
     text-decoration: none;
@@ -47,7 +47,7 @@ nav i {
     vertical-align: middle;
 }
 
-/* Основной контент */
+
 main {
     max-width: 62.5rem; 
     margin: 1.25rem auto;
@@ -58,7 +58,7 @@ h2 {
     color: #4b2e1e;
 }
 
-/* Список товаров */
+
 .product-list {
     display: flex;
     justify-content: center;
@@ -82,7 +82,7 @@ h2 {
     border-radius: 0.625rem;
 }
 
-/* Кнопки */
+
 button {
     background-color: #4b2e1e;
     color: white;
@@ -98,7 +98,7 @@ button:hover {
     background-color: #6a3f2b;
 }
 
-/* Вкладки (переключатель) */
+
 .tabs {
     display: flex;
     justify-content: center;
@@ -124,9 +124,9 @@ button:hover {
     background-color: #5a3627;
 }
 
-/* Форма входа и регистрации */
+
 .form-container {
-    max-width: 400px; /* Увеличиваем максимальную ширину формы */
+    max-width: 400px; 
     width: 100%;
     margin: auto;
     display: flex;
@@ -165,7 +165,7 @@ input[type="submit"]:hover {
     background-color: #6a3f2b;
 }
 
-/* Медиа-запросы для адаптивности */
+
 @media screen and (max-width: 768px) {
     header {
         flex-direction: column;
@@ -213,9 +213,9 @@ input[type="submit"]:hover {
         font-size: 1rem;
     }
 
-    /* Форма на мобильных */
+    
     .form-container {
-        width: 90%; /* Уменьшаем ширину формы на маленьких экранах */
+        width: 90%; 
         padding: 1.5rem;
     }
 
@@ -248,7 +248,7 @@ input[type="submit"]:hover {
         height: 10rem; 
     }
 
-    /* Форма на очень маленьких экранах */
+    
     .form-container {
         width: 90%;
         padding: 1rem;
@@ -264,9 +264,9 @@ input[type="submit"]:hover {
         font-size: 0.85rem;
     }
 }
-/* Форма входа и регистрации */
+
 .form-container {
-    max-width: 400px; /* Увеличиваем максимальную ширину формы */
+    max-width: 400px; 
     width: 100%;
     margin: auto;
     display: flex;
@@ -305,22 +305,22 @@ input[type="submit"]:hover {
     background-color: #6a3f2b;
 }
 
-/* Положение label и input в форме */
+
 .form-container label {
-    display: block; /* Убедимся, что label занимает всю ширину */
+    display: block; 
     margin-bottom: 0.25rem;
 }
 
 .form-container input {
-    display: block; /* Все поля ввода также занимают полную ширину */
+    display: block; 
     width: 100%;
     box-sizing: border-box;
 }
 
-/* Медиа-запросы для адаптивности */
+
 @media screen and (max-width: 768px) {
     .form-container {
-        width: 90%; /* Уменьшаем ширину формы на маленьких экранах */
+        width: 90%; 
         padding: 1.5rem;
     }
 
@@ -351,9 +351,9 @@ input[type="submit"]:hover {
         font-size: 0.85rem;
     }
 }
-/* Модальное окно */
+
 .modal {
-    display: none; /* Скрыто по умолчанию */
+    display: none; 
     position: fixed;
     z-index: 1;
     left: 0;
@@ -361,7 +361,7 @@ input[type="submit"]:hover {
     width: 100%;
     height: 100%;
     overflow: auto;
-    background-color: rgba(0, 0, 0, 0.4); /* Тёмный фон */
+    background-color: rgba(0, 0, 0, 0.4); 
 }
 
 .modal-content {
@@ -395,6 +395,72 @@ button {
 }
 
 #product-image {
-    max-width: 100%;  /* Ограничиваем ширину изображения */
-    height: auto;     /* Сохраняем пропорции изображения */
+    max-width: 100%;  
+    height: auto;     
+}
+.header-link {
+    text-decoration: none; 
+    color: inherit; 
+}
+.product-list {
+    margin-bottom: 20px; 
+}
+.purchases-container {
+    margin-top: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.purchase-item {
+    display: flex;
+    align-items: center;
+    background: #fff;
+    padding: 10px;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    transition: transform 0.2s;
+}
+
+.purchase-item:hover {
+    transform: scale(1.02);
+}
+
+.purchase-details {
+    display: flex;
+    flex-direction: column;
+}
+
+.purchase-details p {
+    margin: 2px 0;
+    font-size: 14px;
+}
+
+.purchase-details strong {
+    font-size: 16px;
+    color: #333;
+}
+.purchases-container {
+    max-width: 400px; 
+    margin: 0 auto; 
+}
+
+.purchase-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    border-bottom: 1px solid #ddd;
+    padding: 10px;
+}
+
+.purchase-image {
+    width: 80px;
+    height: 80px;
+    object-fit: cover;
+    border-radius: 5px;
+}
+
+.purchase-details {
+    flex-grow: 1;
+    font-size: 14px;
 }

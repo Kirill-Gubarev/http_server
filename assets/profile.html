@@ -11,8 +11,8 @@
 <body>
     <header>
         <div class="logo">
-            <img src="favicon2.ico" alt="Логотип">
-            <h1>Wildmonkey.ru</h1>
+            <a href="/"><img src="favicon2.ico" alt="Логотип"></a>
+            <h1><a href="/" class="header-link">Wildmonkey.ru</a></h1>
         </div>
         <nav id="user-menu">
             <a href="/"><i class="fas fa-home"></i> Главная</a>
@@ -27,6 +27,13 @@
                     <p><strong>Email:</strong> <span id="email"></span></p>
                     <p><strong>Имя:</strong> <span id="fullname"></span></p>
                     <p><strong>Баланс:</strong> <span id="balance"></span></p>
+                    
+                    
+                    <div class="balance-topup">
+                        <input type="number" id="topup-amount" min="1" max="10000" placeholder="Сумма пополнения">
+                        <button id="topup-btn">Пополнить баланс</button>
+                    </div>
+                    
                     <button id="logout-btn">Выйти</button>
                 </div>
             </form>

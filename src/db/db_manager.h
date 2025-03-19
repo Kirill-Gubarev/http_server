@@ -16,12 +16,16 @@ namespace db{
 
 		int connect();	
 		std::string get_fruits() const;
+		std::string get_user(std::string login);
 		std::string get_user(std::string login, std::string password);
 		int create_user(std::string login, std::string password, 
 				std::string email, std::string fullname, float balance);
 		int add_product_to_cart(std::string login, std::string product, int quantity);
 		int remove_from_cart(std::string login, std::string product);
 		std::string get_cart_products(std::string login);
+		int add_purchase(std::string login, std::string product, int quantity);
+		float add_balance(std::string login, float balance);
+		std::string get_purchases(std::string login);
 	};
 }
 

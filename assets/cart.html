@@ -11,20 +11,21 @@
 <body>
     <header>
         <div class="logo">
-            <img src="favicon2.ico" alt="Логотип">
-            <h1>Wildmonkey.ru</h1>
+            <a href="/"><img src="favicon2.ico" alt="Логотип"></a>
+            <h1><a href="/" class="header-link">Wildmonkey.ru</a></h1>
         </div>
         <nav id="user-menu">
             <span id="balance">
                 <i class="fas fa-wallet"></i> Баланс: - руб
             </span>
             <a href="/"><i class="fas fa-home"></i> Главная</a>
-            <a id="login" href="profile.html"><i class="fas fa-user"></i> Профиль</a>
+            <a id="login" href="profile"><i class="fas fa-user"></i> Профиль</a>
         </nav>
     </header>
     <main>
         <h2>Ваша корзина</h2>
         <div class="product-list" id="cart-container"></div>
+        <div id="purchase-btn"></div>
     </main>
     <script defer src="cart.js"></script>
 </body>

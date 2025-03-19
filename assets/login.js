@@ -4,7 +4,7 @@ document.addEventListener("DOMContentLoaded", function () {
     const loginForm = document.getElementById("login-form");
     const registerForm = document.getElementById("register-form");
 
-    // Переключение вкладок
+    
     loginTab.addEventListener("click", function () {
         loginForm.style.display = "block";
         registerForm.style.display = "none";
@@ -19,7 +19,7 @@ document.addEventListener("DOMContentLoaded", function () {
         loginTab.classList.remove("active");
     });
 
-    // Обработчик входа
+    
     loginForm.addEventListener("submit", function (event) {
         event.preventDefault();
 
@@ -36,9 +36,9 @@ document.addEventListener("DOMContentLoaded", function () {
         })
         .then(response => response.json())
         .then(data => {
-            if (data.login) {  // Проверяем, что сервер вернул пользователя
+            if (data.login) {  
                 localStorage.setItem("user", JSON.stringify(data));
-                window.location.href = "index.html";
+                window.location.href = "index";
             } else {
                 alert("Неверные данные!");
             }
@@ -49,7 +49,7 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     });
 
-    // Обработчик регистрации
+    
     registerForm.addEventListener("submit", function (event) {
         event.preventDefault();
 
@@ -74,9 +74,9 @@ document.addEventListener("DOMContentLoaded", function () {
         })
         .then(response => response.json())
         .then(data => {
-            if (data.login) {  // Проверяем, что сервер вернул пользователя
+            if (data.login) {  
                 localStorage.setItem("user", JSON.stringify(data));
-                window.location.href = "index.html";
+                window.location.href = "index";
             } else {
                 alert("Ошибка регистрации: имя пользователя занято");
             }

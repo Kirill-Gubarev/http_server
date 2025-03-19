@@ -59,6 +59,11 @@ void http::Http_handler::post(net::Session& session, Http_request& request)const
 					create_http_request_json(200, "{\"success\":false}"));
 			}
 		}
+		else if(action == "get_user"){
+			context.session_manager.send_copy(session, create_http_request_json(200, 
+					context.db_manager.get_user(json["login"])
+					));
+		}
 		else if(action == "add_cart"){
 			if(context.db_manager.add_product_to_cart(json["login"], json["product"], json["quantity"].get<int>())){
 				context.session_manager.send_copy(session,
@@ -81,6 +86,29 @@ void http::Http_handler::post(net::Session& session, Http_request& request)const
 		}
 		else if(action == "get_cart"){
 			context.session_manager.send_copy(session, create_http_request_json(200, context.db_manager.get_cart_products(json["login"])));
+		}
+		else if(action == "get_purchases"){
+			std::cout << create_http_request_json(200, context.db_manager.get_purchases(json["login"]));
+			context.session_manager.send_copy(session, create_http_request_json(200, context.db_manager.get_purchases(json["login"])));
+		}
+		else if(action == "add_purchase"){
+			for (const auto& item : json["items"]) {
+				std::string login = json["login"];
+				std::string product = item["product"];
+				int quantity = item["quantity"].get<int>();
+
+				// Добавляем покупку для каждого товара
+				int success = context.db_manager.add_purchase(login, product, quantity);
+
+				// Отправляем ответ клиенту с результатом покупки
+				context.session_manager.send_copy(session,
+					create_http_request_json(200, "{\"success\":" + std::to_string(success) + "}"));
+			}
+		}
+		else if(action == "add_balance"){
+			context.session_manager.send_copy(session,
+				create_http_request_json(200, "{\"balance\":" + std::to_string(context.db_manager.add_balance(json["login"], json["balance"].get<double>())) + "}")
+				);
 		}
 	}
 	catch(std::exception& ex){
